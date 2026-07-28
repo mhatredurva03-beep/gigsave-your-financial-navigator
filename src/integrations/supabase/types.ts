@@ -14,13 +14,299 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          expense_date: string
+          id: string
+          note: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category?: string
+          created_at?: string
+          expense_date?: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          expense_date?: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      goals: {
+        Row: {
+          created_at: string
+          current_amount: number
+          deadline: string | null
+          goal_name: string
+          icon: string
+          id: string
+          is_completed: boolean
+          jar_id: string | null
+          target_amount: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_amount?: number
+          deadline?: string | null
+          goal_name: string
+          icon?: string
+          id?: string
+          is_completed?: boolean
+          jar_id?: string | null
+          target_amount: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_amount?: number
+          deadline?: string | null
+          goal_name?: string
+          icon?: string
+          id?: string
+          is_completed?: boolean
+          jar_id?: string | null
+          target_amount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goals_jar_id_fkey"
+            columns: ["jar_id"]
+            isOneToOne: false
+            referencedRelation: "jars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      income: {
+        Row: {
+          allocated_amount: number
+          amount: number
+          created_at: string
+          id: string
+          income_date: string
+          notes: string | null
+          source: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          allocated_amount?: number
+          amount: number
+          created_at?: string
+          id?: string
+          income_date?: string
+          notes?: string | null
+          source?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          allocated_amount?: number
+          amount?: number
+          created_at?: string
+          id?: string
+          income_date?: string
+          notes?: string | null
+          source?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      jar_allocations: {
+        Row: {
+          allocated_on: string
+          amount: number
+          created_at: string
+          id: string
+          income_id: string | null
+          jar_id: string
+          user_id: string
+        }
+        Insert: {
+          allocated_on?: string
+          amount: number
+          created_at?: string
+          id?: string
+          income_id?: string | null
+          jar_id: string
+          user_id: string
+        }
+        Update: {
+          allocated_on?: string
+          amount?: number
+          created_at?: string
+          id?: string
+          income_id?: string | null
+          jar_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jar_allocations_income_id_fkey"
+            columns: ["income_id"]
+            isOneToOne: false
+            referencedRelation: "income"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jar_allocations_jar_id_fkey"
+            columns: ["jar_id"]
+            isOneToOne: false
+            referencedRelation: "jars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jars: {
+        Row: {
+          balance: number
+          color: string
+          created_at: string
+          icon: string
+          id: string
+          jar_name: string
+          percentage: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          color?: string
+          created_at?: string
+          icon?: string
+          id?: string
+          jar_name: string
+          percentage?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          color?: string
+          created_at?: string
+          icon?: string
+          id?: string
+          jar_name?: string
+          percentage?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          daily_reminder_enabled: boolean
+          full_name: string
+          id: string
+          monthly_expense_budget: number
+          notifications_enabled: boolean
+          occupation: string | null
+          phone: string | null
+          preferred_currency: string
+          preferred_language: string
+          theme: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          daily_reminder_enabled?: boolean
+          full_name?: string
+          id: string
+          monthly_expense_budget?: number
+          notifications_enabled?: boolean
+          occupation?: string | null
+          phone?: string | null
+          preferred_currency?: string
+          preferred_language?: string
+          theme?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          daily_reminder_enabled?: boolean
+          full_name?: string
+          id?: string
+          monthly_expense_budget?: number
+          notifications_enabled?: boolean
+          occupation?: string | null
+          phone?: string | null
+          preferred_currency?: string
+          preferred_language?: string
+          theme?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      delete_income: { Args: { p_income_id: string }; Returns: undefined }
+      record_income: {
+        Args: {
+          p_amount: number
+          p_income_date: string
+          p_notes: string
+          p_source: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
