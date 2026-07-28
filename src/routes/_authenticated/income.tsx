@@ -51,7 +51,7 @@ function IncomePage() {
 
   const [form, setForm] = useState({
     amount: "",
-    source: INCOME_SOURCES[0],
+    source: INCOME_SOURCES[0] as string,
     income_date: localISODate(),
     notes: "",
   });
@@ -145,7 +145,7 @@ function IncomePage() {
                   ))}
                   <li className="flex items-center justify-between gap-3 border-t border-border/60 pt-1 font-semibold">
                     <span>Left to spend</span>
-                    <span>{formatCurrency(preview.remaining, currency)}</span>
+                    <span>{formatCurrency(preview.available, currency)}</span>
                   </li>
                 </ul>
               </div>
