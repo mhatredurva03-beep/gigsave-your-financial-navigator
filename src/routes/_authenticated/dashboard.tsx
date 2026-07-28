@@ -101,7 +101,10 @@ function DashboardPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               {overview.jars.map((jar) => (
                 <GlassCard key={jar.id} className="flex items-center gap-4">
-                  <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-${jar.color}/15 text-${jar.color}`}>
+                  <span
+                    className="grid h-11 w-11 shrink-0 place-items-center rounded-xl"
+                    style={toneStyle(jar.color)}
+                  >
                     <DynamicIcon name={jar.icon} className="h-5 w-5" />
                   </span>
                   <div className="min-w-0 flex-1">
