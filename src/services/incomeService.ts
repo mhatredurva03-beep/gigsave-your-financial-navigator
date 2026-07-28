@@ -24,7 +24,7 @@ export const incomeService = {
     const { data, error } = await supabase.rpc("record_income", {
       p_amount: input.amount,
       p_source: input.source,
-      p_notes: input.notes ?? null,
+      p_notes: input.notes ?? "",
       p_income_date: input.income_date,
     });
     if (error) throw new Error(`Could not save income: ${error.message}`);
