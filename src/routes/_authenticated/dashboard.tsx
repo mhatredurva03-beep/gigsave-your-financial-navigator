@@ -68,8 +68,8 @@ function DashboardPage() {
               <span className="text-[10px] uppercase tracking-wide text-muted-foreground">score</span>
             </ProgressRing>
             <div className="min-w-0">
-              <h2 className="text-base font-semibold">Financial health: {overview.health.rating}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">{overview.health.summary}</p>
+              <h2 className="text-base font-semibold">Financial health: {overview.health.label}</h2>
+              <p className="mt-1 text-sm text-muted-foreground">{`${overview.health.savingsScore + overview.health.expenseScore}/50 on saving and spending control.`}</p>
               <Link to="/analytics" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
                 <TrendingUp className="h-3.5 w-3.5" /> See analytics
               </Link>
@@ -105,7 +105,7 @@ function DashboardPage() {
                     <DynamicIcon name={jar.icon} className="h-5 w-5" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold">{jar.name}</p>
+                    <p className="truncate text-sm font-semibold">{jar.jar_name}</p>
                     <p className="text-xs text-muted-foreground">{toNumber(jar.percentage)}% of every income</p>
                   </div>
                   <p className="shrink-0 text-sm font-bold">{formatCurrency(toNumber(jar.balance), currency)}</p>
@@ -144,9 +144,9 @@ function DashboardPage() {
                       <span className="text-xs font-bold">{Math.round(percent)}%</span>
                     </ProgressRing>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold">{goal.name}</p>
+                      <p className="truncate text-sm font-semibold">{goal.goal_name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {formatCurrency(toNumber(goal.saved_amount), currency)} of{" "}
+                        {formatCurrency(toNumber(goal.current_amount), currency)} of{" "}
                         {formatCurrency(toNumber(goal.target_amount), currency)}
                       </p>
                     </div>
