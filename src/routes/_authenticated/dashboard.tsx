@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFinancialOverview } from "@/hooks/useFinancialOverview";
 import { formatCurrency, relativeDay, toNumber } from "@/utils/format";
+import { toneStyle } from "@/utils/tone";
 import { goalProgress } from "@/utils/finance";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
