@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          id: string
+          user_id: string
+          role: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          role?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          role?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       expenses: {
         Row: {
           amount: number
@@ -297,7 +321,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_get_platform_stats: { Args: Record<string, never>; Returns: Json }
+      admin_get_user_detail: { Args: { p_user_id: string }; Returns: Json }
+      admin_list_users: {
+        Args: { p_limit?: number; p_offset?: number; p_search?: string | null }
+        Returns: Json
+      }
       delete_income: { Args: { p_income_id: string }; Returns: undefined }
+      get_admin_role: { Args: Record<string, never>; Returns: string | null }
+      is_admin: { Args: Record<string, never>; Returns: boolean }
       record_income: {
         Args: {
           p_amount: number
