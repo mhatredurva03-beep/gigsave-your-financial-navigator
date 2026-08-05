@@ -50,7 +50,10 @@ export function addDays(date: Date, days: number): Date {
 export function formatDate(value: string | Date, opts?: Intl.DateTimeFormatOptions): string {
   const date = typeof value === "string" ? new Date(`${value}T00:00:00`) : value;
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("en-IN", opts ?? { day: "numeric", month: "short", year: "numeric" }).format(date);
+  return new Intl.DateTimeFormat(
+    "en-IN",
+    opts ?? { day: "numeric", month: "short", year: "numeric" },
+  ).format(date);
 }
 
 export function relativeDay(value: string): string {

@@ -20,7 +20,12 @@ export const incomeService = {
    * Records income and lets the database split it across jars atomically,
    * so jar balances, goal progress and available balance stay consistent.
    */
-  async create(input: { amount: number; source: string; notes?: string | null; income_date: string }) {
+  async create(input: {
+    amount: number;
+    source: string;
+    notes?: string | null;
+    income_date: string;
+  }) {
     const { data, error } = await supabase.rpc("record_income", {
       p_amount: input.amount,
       p_source: input.source,
@@ -35,7 +40,13 @@ export const incomeService = {
   async update(id: string, patch: IncomeUpdate): Promise<Income> {
     const userId = await requireUserId();
     return unwrap(
-      await supabase.from("income").update(patch).eq("id", id).eq("user_id", userId).select("*").single(),
+      await supabase
+        .from("income")
+        .update(patch)
+        .eq("id", id)
+        .eq("user_id", userId)
+        .select("*")
+        .single(),
       "Could not update income",
     );
   },

@@ -248,21 +248,31 @@ function UserDetailDialog({ userId, onClose }: { userId: string; onClose: () => 
               {/* Goals */}
               {data.goals && data.goals.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-700">Goals ({data.goals.length})</h4>
+                  <h4 className="text-sm font-semibold text-gray-700">
+                    Goals ({data.goals.length})
+                  </h4>
                   <div className="mt-2 space-y-2">
                     {data.goals.map((goal) => (
-                      <div key={goal.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
+                      <div
+                        key={goal.id}
+                        className="flex items-center justify-between rounded-lg border border-gray-100 p-3"
+                      >
                         <div>
                           <p className="text-sm font-medium">{goal.goal_name}</p>
                           <p className="text-xs text-gray-500">
-                            ₹{Number(goal.current_amount).toLocaleString("en-IN")} / ₹{Number(goal.target_amount).toLocaleString("en-IN")}
+                            ₹{Number(goal.current_amount).toLocaleString("en-IN")} / ₹
+                            {Number(goal.target_amount).toLocaleString("en-IN")}
                           </p>
                         </div>
                         {goal.is_completed ? (
                           <Badge className="bg-green-100 text-green-700">Completed</Badge>
                         ) : (
                           <Badge variant="secondary">
-                            {((Number(goal.current_amount) / Number(goal.target_amount)) * 100).toFixed(0)}%
+                            {(
+                              (Number(goal.current_amount) / Number(goal.target_amount)) *
+                              100
+                            ).toFixed(0)}
+                            %
                           </Badge>
                         )}
                       </div>
@@ -276,7 +286,10 @@ function UserDetailDialog({ userId, onClose }: { userId: string; onClose: () => 
               {data.jars && data.jars.length > 0 ? (
                 <div className="space-y-2">
                   {data.jars.map((jar) => (
-                    <div key={jar.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
+                    <div
+                      key={jar.id}
+                      className="flex items-center justify-between rounded-lg border border-gray-100 p-3"
+                    >
                       <div>
                         <p className="text-sm font-medium">{jar.jar_name}</p>
                         <p className="text-xs text-gray-500">{jar.percentage}% allocation</p>
@@ -296,7 +309,10 @@ function UserDetailDialog({ userId, onClose }: { userId: string; onClose: () => 
               {data.recent_income && data.recent_income.length > 0 ? (
                 <div className="space-y-2">
                   {data.recent_income.map((income) => (
-                    <div key={income.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
+                    <div
+                      key={income.id}
+                      className="flex items-center justify-between rounded-lg border border-gray-100 p-3"
+                    >
                       <div>
                         <p className="text-sm font-medium">{income.source}</p>
                         <p className="text-xs text-gray-500">{income.income_date}</p>
@@ -316,7 +332,10 @@ function UserDetailDialog({ userId, onClose }: { userId: string; onClose: () => 
               {data.recent_expenses && data.recent_expenses.length > 0 ? (
                 <div className="space-y-2">
                   {data.recent_expenses.map((expense) => (
-                    <div key={expense.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
+                    <div
+                      key={expense.id}
+                      className="flex items-center justify-between rounded-lg border border-gray-100 p-3"
+                    >
                       <div>
                         <p className="text-sm font-medium">{expense.category}</p>
                         <p className="text-xs text-gray-500">{expense.expense_date}</p>

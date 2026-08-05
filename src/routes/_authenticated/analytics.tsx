@@ -28,9 +28,15 @@ export const Route = createFileRoute("/_authenticated/analytics")({
   head: () => ({
     meta: [
       { title: "Analytics — GigSave" },
-      { name: "description", content: "See earnings trends, spending breakdowns and your financial health score." },
+      {
+        name: "description",
+        content: "See earnings trends, spending breakdowns and your financial health score.",
+      },
       { property: "og:title", content: "Analytics — GigSave" },
-      { property: "og:description", content: "Charts and trends for gig income, expenses and savings." },
+      {
+        property: "og:description",
+        content: "Charts and trends for gig income, expenses and savings.",
+      },
     ],
   }),
   component: AnalyticsPage,
@@ -46,23 +52,44 @@ const PIE_TONES = [
 ];
 
 function AnalyticsPage() {
-  const { income, expenses, jars, currency, health, totalEarned, totalSpent, totalSaved, isLoading } =
-    useFinancialOverview();
+  const {
+    income,
+    expenses,
+    jars,
+    currency,
+    health,
+    totalEarned,
+    totalSpent,
+    totalSaved,
+    isLoading,
+  } = useFinancialOverview();
 
   const daily = useMemo(() => {
-    const days = Array.from({ length: 14 }, (_, index) => localISODate(addDays(new Date(), -(13 - index))));
+    const days = Array.from({ length: 14 }, (_, index) =>
+      localISODate(addDays(new Date(), -(13 - index))),
+    );
     return days.map((day) => ({
       day: day.slice(5),
-      earned: income.filter((r) => r.income_date === day).reduce((s, r) => s + toNumber(r.amount), 0),
-      saved: income.filter((r) => r.income_date === day).reduce((s, r) => s + toNumber(r.allocated_amount), 0),
-      spent: expenses.filter((r) => r.expense_date === day).reduce((s, r) => s + toNumber(r.amount), 0),
+      earned: income
+        .filter((r) => r.income_date === day)
+        .reduce((s, r) => s + toNumber(r.amount), 0),
+      saved: income
+        .filter((r) => r.income_date === day)
+        .reduce((s, r) => s + toNumber(r.allocated_amount), 0),
+      spent: expenses
+        .filter((r) => r.expense_date === day)
+        .reduce((s, r) => s + toNumber(r.amount), 0),
     }));
   }, [income, expenses]);
 
   const byCategory = useMemo(() => {
     const map = new Map<string, number>();
-    expenses.forEach((row) => map.set(row.category, (map.get(row.category) ?? 0) + toNumber(row.amount)));
-    return [...map.entries()].map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
+    expenses.forEach((row) =>
+      map.set(row.category, (map.get(row.category) ?? 0) + toNumber(row.amount)),
+    );
+    return [...map.entries()]
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
   }, [expenses]);
 
   const bySource = useMemo(() => {
@@ -82,7 +109,10 @@ function AnalyticsPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        <SectionHeading title="Analytics" description="Where your money comes from and where it goes." />
+        <SectionHeading
+          title="Analytics"
+          description="Where your money comes from and where it goes."
+        />
 
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Crunching your numbers…</p>
@@ -96,16 +126,24 @@ function AnalyticsPage() {
           <>
             <div className="grid gap-4 sm:grid-cols-3">
               <GlassCard>
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">Total earned</p>
-                <p className="mt-1 text-2xl font-semibold">{formatCurrency(totalEarned, currency)}</p>
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Total earned
+                </p>
+                <p className="mt-1 text-2xl font-semibold">
+                  {formatCurrency(totalEarned, currency)}
+                </p>
               </GlassCard>
               <GlassCard>
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">Total saved</p>
-                <p className="mt-1 text-2xl font-semibold">{formatCurrency(totalSaved, currency)}</p>
+                <p className="mt-1 text-2xl font-semibold">
+                  {formatCurrency(totalSaved, currency)}
+                </p>
               </GlassCard>
               <GlassCard>
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">Total spent</p>
-                <p className="mt-1 text-2xl font-semibold">{formatCurrency(totalSpent, currency)}</p>
+                <p className="mt-1 text-2xl font-semibold">
+                  {formatCurrency(totalSpent, currency)}
+                </p>
               </GlassCard>
             </div>
 
@@ -125,7 +163,13 @@ function AnalyticsPage() {
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                    <XAxis dataKey="day" tickLine={false} axisLine={false} fontSize={11} stroke="var(--muted-foreground)" />
+                    <XAxis
+                      dataKey="day"
+                      tickLine={false}
+                      axisLine={false}
+                      fontSize={11}
+                      stroke="var(--muted-foreground)"
+                    />
                     <YAxis
                       tickFormatter={axisFormatter}
                       tickLine={false}
@@ -174,7 +218,14 @@ function AnalyticsPage() {
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
-                        <Pie data={byCategory} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} paddingAngle={2}>
+                        <Pie
+                          data={byCategory}
+                          dataKey="value"
+                          nameKey="name"
+                          innerRadius={55}
+                          outerRadius={90}
+                          paddingAngle={2}
+                        >
                           {byCategory.map((entry, index) => (
                             <Cell key={entry.name} fill={PIE_TONES[index % PIE_TONES.length]} />
                           ))}
@@ -203,8 +254,18 @@ function AnalyticsPage() {
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={bySource} margin={{ left: 4, right: 4, top: 8, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                        <XAxis dataKey="name" tickLine={false} axisLine={false} fontSize={11} stroke="var(--muted-foreground)" />
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke="var(--border)"
+                          vertical={false}
+                        />
+                        <XAxis
+                          dataKey="name"
+                          tickLine={false}
+                          axisLine={false}
+                          fontSize={11}
+                          stroke="var(--muted-foreground)"
+                        />
                         <YAxis
                           tickFormatter={axisFormatter}
                           tickLine={false}
@@ -223,7 +284,12 @@ function AnalyticsPage() {
                             color: "var(--foreground)",
                           }}
                         />
-                        <Bar dataKey="value" name="Earned" radius={[8, 8, 0, 0]} fill="var(--brand-violet)" />
+                        <Bar
+                          dataKey="value"
+                          name="Earned"
+                          radius={[8, 8, 0, 0]}
+                          fill="var(--brand-violet)"
+                        />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -232,13 +298,16 @@ function AnalyticsPage() {
             </div>
 
             <GlassCard className="space-y-4">
-              <SectionHeading title="Financial health" description={`${health.label} — ${health.score}/100`} />
+              <SectionHeading
+                title="Financial health"
+                description={`${health.label} — ${health.score}/100`}
+              />
               <div className="flex flex-wrap items-center gap-6">
                 <ProgressRing value={health.score} size={110} thickness={10}>
                   <span className="text-2xl font-semibold">{health.score}</span>
                   <span className="text-[11px] text-muted-foreground">{health.label}</span>
                 </ProgressRing>
-                <div className="min-w-[220px] flex-1 space-y-3">
+                <div className="min-w-55 flex-1 space-y-3">
                   {[
                     { label: "Savings rate", value: health.savingsScore },
                     { label: "Goal progress", value: health.goalScore },
@@ -268,7 +337,9 @@ function AnalyticsPage() {
                 {jars.map((jar) => (
                   <div key={jar.id} className="flex items-center justify-between text-sm">
                     <span className="truncate">{jar.jar_name}</span>
-                    <span className="font-semibold">{formatCurrency(toNumber(jar.balance), currency)}</span>
+                    <span className="font-semibold">
+                      {formatCurrency(toNumber(jar.balance), currency)}
+                    </span>
                   </div>
                 ))}
               </GlassCard>

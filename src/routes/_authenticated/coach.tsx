@@ -15,7 +15,10 @@ export const Route = createFileRoute("/_authenticated/coach")({
   head: () => ({
     meta: [
       { title: "Money Coach — GigSave" },
-      { name: "description", content: "Personalised savings tips based on your real earnings, spending and goals." },
+      {
+        name: "description",
+        content: "Personalised savings tips based on your real earnings, spending and goals.",
+      },
       { property: "og:title", content: "Money Coach — GigSave" },
       { property: "og:description", content: "Your daily money coach for gig work income." },
     ],
@@ -75,7 +78,8 @@ function CoachPage() {
     if (totalSpent === 0 && totalEarned > 0) {
       list.push({
         title: "Log your costs too",
-        description: "Fuel, food and repairs decide your real take-home. Track them for an honest picture.",
+        description:
+          "Fuel, food and repairs decide your real take-home. Track them for an honest picture.",
         to: "/expenses",
         cta: "Add expense",
       });
@@ -97,7 +101,10 @@ function CoachPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        <SectionHeading title="Money Coach" description="Personalised guidance from your own numbers." />
+        <SectionHeading
+          title="Money Coach"
+          description="Personalised guidance from your own numbers."
+        />
 
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Reading your finances…</p>
@@ -108,22 +115,22 @@ function CoachPage() {
                 <span className="text-2xl font-semibold">{health.score}</span>
                 <span className="text-[11px] text-muted-foreground">{health.label}</span>
               </ProgressRing>
-              <div className="min-w-[200px] flex-1 space-y-2">
+              <div className="min-w-50 flex-1 space-y-2">
                 <p className="text-sm text-muted-foreground">
                   Your financial health is{" "}
                   <span className="font-medium text-foreground">{health.label.toLowerCase()}</span>.
                 </p>
                 <div className="flex flex-wrap gap-4 text-sm">
                   <span className="inline-flex items-center gap-1.5">
-                    <TrendingUp className="h-4 w-4 text-[var(--brand-teal)]" />
+                    <TrendingUp className="h-4 w-4 text-teal" />
                     Saving {savingsRate}% of earnings
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <TrendingDown className="h-4 w-4 text-[var(--brand-pink)]" />
+                    <TrendingDown className="h-4 w-4 text-pink" />
                     Spending {spendRate}%
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <Flame className="h-4 w-4 text-[var(--brand-amber)]" />
+                    <Flame className="h-4 w-4 text-amber" />
                     {streak} day streak
                   </span>
                 </div>
@@ -134,7 +141,10 @@ function CoachPage() {
               <SectionHeading title="Today's insights" />
               <div className="grid gap-3">
                 {insights.map((insight) => (
-                  <GlassCard key={insight.title} className={cn("space-y-1", TONE_CLASS[insight.tone])}>
+                  <GlassCard
+                    key={insight.title}
+                    className={cn("space-y-1", TONE_CLASS[insight.tone])}
+                  >
                     <p className="flex items-center gap-2 font-semibold">
                       <Sparkles className="h-4 w-4 text-primary" />
                       {insight.title}
@@ -153,7 +163,7 @@ function CoachPage() {
                     <GlassCard key={action.title} className="flex flex-col gap-3">
                       <div className="space-y-1">
                         <p className="flex items-center gap-2 font-semibold">
-                          <Lightbulb className="h-4 w-4 text-[var(--brand-amber)]" />
+                          <Lightbulb className="h-4 w-4 text-amber" />
                           {action.title}
                         </p>
                         <p className="text-sm text-muted-foreground">{action.description}</p>
@@ -169,7 +179,10 @@ function CoachPage() {
 
             {goals.filter((goal) => !goal.is_completed).length > 0 ? (
               <section className="space-y-3">
-                <SectionHeading title="Goal forecast" description="Based on your current saving pace." />
+                <SectionHeading
+                  title="Goal forecast"
+                  description="Based on your current saving pace."
+                />
                 <GlassCard className="divide-y divide-border/60 p-0">
                   {goals
                     .filter((goal) => !goal.is_completed)
@@ -181,7 +194,9 @@ function CoachPage() {
                             <p className="truncate text-sm font-medium">{goal.goal_name}</p>
                             <p className="text-xs text-muted-foreground">{estimate.label}</p>
                           </div>
-                          <p className="shrink-0 text-sm font-semibold">{Math.round(goalProgress(goal))}%</p>
+                          <p className="shrink-0 text-sm font-semibold">
+                            {Math.round(goalProgress(goal))}%
+                          </p>
                         </div>
                       );
                     })}

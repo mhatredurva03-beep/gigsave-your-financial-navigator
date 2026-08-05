@@ -31,9 +31,15 @@ export const Route = createFileRoute("/_authenticated/jars")({
   head: () => ({
     meta: [
       { title: "Savings Jars — GigSave" },
-      { name: "description", content: "Create savings jars and set the percentage of every earning that saves itself." },
+      {
+        name: "description",
+        content: "Create savings jars and set the percentage of every earning that saves itself.",
+      },
       { property: "og:title", content: "Savings Jars — GigSave" },
-      { property: "og:description", content: "Automatic percentage-based savings jars for gig workers." },
+      {
+        property: "og:description",
+        content: "Automatic percentage-based savings jars for gig workers.",
+      },
     ],
   }),
   component: JarsPage,
@@ -43,10 +49,18 @@ const schema = z.object({
   jar_name: z.string().trim().min(2, "Give your jar a name").max(40),
   icon: z.string().min(1),
   color: z.string().min(1),
-  percentage: z.coerce.number().min(0, "Percentage cannot be negative").max(100, "Percentage cannot exceed 100"),
+  percentage: z.coerce
+    .number()
+    .min(0, "Percentage cannot be negative")
+    .max(100, "Percentage cannot exceed 100"),
 });
 
-const emptyForm = { jar_name: "", icon: JAR_ICONS[0] as string, color: JAR_COLORS[0] as string, percentage: 10 };
+const emptyForm = {
+  jar_name: "",
+  icon: JAR_ICONS[0] as string,
+  color: JAR_COLORS[0] as string,
+  percentage: 10,
+};
 
 function JarsPage() {
   const { data: jars = [], isLoading } = useJars();
@@ -94,10 +108,7 @@ function JarsPage() {
       return toast.error("Total jar percentage cannot exceed 100%");
     }
 
-    saveJar.mutate(
-      { id: editingId, input: parsed.data },
-      { onSuccess: () => setOpen(false) },
-    );
+    saveJar.mutate({ id: editingId, input: parsed.data }, { onSuccess: () => setOpen(false) });
   }
 
   return (
@@ -117,7 +128,9 @@ function JarsPage() {
         <GlassCard className="grid gap-4 sm:grid-cols-2">
           <div>
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Total saved</p>
-            <p className="mt-1 text-2xl font-semibold">{formatCurrency(totals.balance, currency)}</p>
+            <p className="mt-1 text-2xl font-semibold">
+              {formatCurrency(totals.balance, currency)}
+            </p>
           </div>
           <div>
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Saving rule</p>
@@ -137,21 +150,32 @@ function JarsPage() {
             icon={<PiggyBank className="h-8 w-8" />}
             title="No jars yet"
             description="Create your first jar and pick what share of every earning goes into it."
-            action={<Button variant="hero" onClick={openCreate}>Create a jar</Button>}
+            action={
+              <Button variant="hero" onClick={openCreate}>
+                Create a jar
+              </Button>
+            }
           />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
             {jars.map((jar) => (
               <GlassCard key={jar.id} className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full" style={toneStyle(jar.color)}>
+                  <span
+                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full"
+                    style={toneStyle(jar.color)}
+                  >
                     <DynamicIcon name={jar.icon} className="h-5 w-5" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold">{jar.jar_name}</p>
-                    <p className="text-xs text-muted-foreground">{toNumber(jar.percentage)}% of every earning</p>
+                    <p className="text-xs text-muted-foreground">
+                      {toNumber(jar.percentage)}% of every earning
+                    </p>
                   </div>
-                  <p className="shrink-0 text-sm font-semibold">{formatCurrency(toNumber(jar.balance), currency)}</p>
+                  <p className="shrink-0 text-sm font-semibold">
+                    {formatCurrency(toNumber(jar.balance), currency)}
+                  </p>
                 </div>
 
                 <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -187,7 +211,9 @@ function JarsPage() {
         <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{editingId ? "Edit jar" : "New jar"}</DialogTitle>
-            <DialogDescription>Pick a name, a look, and the share of each earning it should take.</DialogDescription>
+            <DialogDescription>
+              Pick a name, a look, and the share of each earning it should take.
+            </DialogDescription>
           </DialogHeader>
 
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -235,7 +261,8 @@ function JarsPage() {
                     onClick={() => setForm((s) => ({ ...s, color }))}
                     className={cn(
                       "h-8 w-8 rounded-full border border-border/60 transition",
-                      form.color === color && "ring-2 ring-primary ring-offset-2 ring-offset-background",
+                      form.color === color &&
+                        "ring-2 ring-primary ring-offset-2 ring-offset-background",
                     )}
                     style={{ backgroundColor: `var(--brand-${color})` }}
                   />

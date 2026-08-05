@@ -49,7 +49,11 @@ export const notificationService = {
 
   async remove(id: string): Promise<void> {
     const userId = await requireUserId();
-    const { error } = await supabase.from("notifications").delete().eq("id", id).eq("user_id", userId);
+    const { error } = await supabase
+      .from("notifications")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", userId);
     if (error) throw new Error(`Could not delete notification: ${error.message}`);
   },
 };

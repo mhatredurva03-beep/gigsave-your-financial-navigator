@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { PiggyBank, Loader2 } from "lucide-react";
+import { PiggyBank, Loader2, MailCheck } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -22,7 +22,10 @@ export const Route = createFileRoute("/auth")({
         content: "Sign in or create your free GigSave account to track gig earnings, expenses and savings goals.",
       },
       { property: "og:title", content: "Sign in to GigSave" },
-      { property: "og:description", content: "Create your free GigSave account and start saving automatically." },
+      {
+        property: "og:description",
+        content: "Create your free GigSave account and start saving automatically.",
+      },
     ],
   }),
   component: AuthPage,
@@ -39,11 +42,41 @@ const signInSchema = z.object({
   password: z.string().min(1, "Enter your password").max(72),
 });
 
+/** Map raw Supabase error messages to actionable, user-friendly text. */
+function friendlyAuthError(raw: string): { message: string; needsConfirmation?: boolean } {
+  const lower = raw.toLowerCase();
+  if (lower.includes("invalid login credentials") || lower.includes("invalid credentials")) {
+    return {
+      message: "Email or password is incorrect. Double-check and try again.",
+    };
+  }
+  if (lower.includes("email not confirmed")) {
+    return {
+      message: "Your email isn't confirmed yet. Check your inbox for the confirmation link.",
+      needsConfirmation: true,
+    };
+  }
+  if (lower.includes("user already registered")) {
+    return { message: "An account with this email already exists. Try signing in instead." };
+  }
+  if (lower.includes("password should be at least")) {
+    return { message: "Password must be at least 8 characters." };
+  }
+  return { message: raw };
+}
+
 function AuthPage() {
   const navigate = useNavigate();
   const [pending, setPending] = useState<string | null>(null);
   const [signIn, setSignIn] = useState({ email: "", password: "" });
-  const [signUp, setSignUp] = useState({ fullName: "", email: "", password: "", occupation: OCCUPATIONS[0] });
+  const [signUp, setSignUp] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    occupation: OCCUPATIONS[0],
+  });
+  // If the user needs to confirm their email, surface a resend button
+  const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null);
 
   async function handleSignIn(event: React.FormEvent) {
     event.preventDefault();
@@ -51,11 +84,15 @@ function AuthPage() {
     if (!parsed.success) return toast.error(parsed.error.issues[0].message);
 
     setPending("signin");
+    setUnconfirmedEmail(null);
     try {
       await authService.signIn(parsed.data.email, parsed.data.password);
       navigate({ to: "/dashboard", replace: true });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not sign in");
+      const raw = error instanceof Error ? error.message : "Could not sign in";
+      const { message, needsConfirmation } = friendlyAuthError(raw);
+      toast.error(message);
+      if (needsConfirmation) setUnconfirmedEmail(parsed.data.email);
     } finally {
       setPending(null);
     }
@@ -77,10 +114,13 @@ function AuthPage() {
       if (result.session) {
         navigate({ to: "/dashboard", replace: true });
       } else {
-        toast.success("Check your inbox to confirm your email, then sign in.");
+        // Email confirmation required
+        setUnconfirmedEmail(parsed.data.email);
+        toast.success("Account created! Check your inbox and click the confirmation link to sign in.");
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not create your account");
+      const raw = error instanceof Error ? error.message : "Could not create your account";
+      toast.error(friendlyAuthError(raw).message);
     } finally {
       setPending(null);
     }
@@ -110,9 +150,22 @@ function AuthPage() {
     }
     try {
       await authService.sendPasswordReset(email);
-      toast.success("Password reset link sent to your email.");
+      toast.success("Password reset link sent — check your inbox.");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not send reset link");
+    }
+  }
+
+  async function handleResendConfirmation() {
+    if (!unconfirmedEmail) return;
+    setPending("resend");
+    try {
+      await authService.resendConfirmation(unconfirmedEmail);
+      toast.success(`Confirmation email resent to ${unconfirmedEmail}. Check your inbox.`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not resend confirmation");
+    } finally {
+      setPending(null);
     }
   }
 
@@ -120,12 +173,39 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="mb-7 text-center">
-          <Link to="/" className="inline-grid h-14 w-14 place-items-center rounded-2xl gradient-primary text-white shadow-glow">
+          <Link
+            to="/"
+            className="inline-grid h-14 w-14 place-items-center rounded-2xl gradient-primary text-white shadow-glow"
+          >
             <PiggyBank className="h-7 w-7" aria-hidden="true" />
           </Link>
           <h1 className="mt-4 text-2xl font-bold tracking-tight">{APP_NAME}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{APP_TAGLINE}</p>
         </div>
+
+        {/* Email confirmation nudge */}
+        {unconfirmedEmail ? (
+          <div className="mb-4 flex items-start gap-3 rounded-2xl border border-amber/40 bg-amber/10 p-4">
+            <MailCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-amber-900 dark:text-amber-200">Confirm your email</p>
+              <p className="mt-0.5 text-xs text-amber-800 dark:text-amber-300">
+                We sent a confirmation link to <span className="font-medium">{unconfirmedEmail}</span>. Click it to
+                activate your account, then sign in.
+              </p>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mt-2 h-auto p-0 text-xs font-semibold text-amber-700 hover:text-amber-900 dark:text-amber-300"
+                onClick={handleResendConfirmation}
+                disabled={pending === "resend"}
+              >
+                {pending === "resend" ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : null}
+                Resend confirmation email
+              </Button>
+            </div>
+          </div>
+        ) : null}
 
         <div className="glass-panel rounded-3xl p-6">
           <Tabs defaultValue="signin">

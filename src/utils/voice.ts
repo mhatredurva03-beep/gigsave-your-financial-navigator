@@ -11,12 +11,39 @@ export interface ParsedVoiceEntry {
 }
 
 const WORD_NUMBERS: Record<string, number> = {
-  one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
-  twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90,
-  hundred: 100, thousand: 1000,
+  one: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
+  ten: 10,
+  twenty: 20,
+  thirty: 30,
+  forty: 40,
+  fifty: 50,
+  sixty: 60,
+  seventy: 70,
+  eighty: 80,
+  ninety: 90,
+  hundred: 100,
+  thousand: 1000,
 };
 
-const EXPENSE_WORDS = ["spent", "spend", "paid", "pay", "bought", "buy", "expense", "cost", "kharch"];
+const EXPENSE_WORDS = [
+  "spent",
+  "spend",
+  "paid",
+  "pay",
+  "bought",
+  "buy",
+  "expense",
+  "cost",
+  "kharch",
+];
 const INCOME_WORDS = ["earn", "earned", "income", "made", "got", "received", "kamaya", "salary"];
 
 /**
@@ -31,7 +58,9 @@ export function parseVoiceEntry(transcript: string): ParsedVoiceEntry {
   const kind: "income" | "expense" = expenseHits > incomeHits ? "expense" : "income";
 
   let amount: number | null = null;
-  const digits = text.replace(/,/g, "").match(/(?:₹|rs\.?|inr)?\s*(\d+(?:\.\d{1,2})?)\s*(k|thousand|hazaar|hazar)?/i);
+  const digits = text
+    .replace(/,/g, "")
+    .match(/(?:₹|rs\.?|inr)?\s*(\d+(?:\.\d{1,2})?)\s*(k|thousand|hazaar|hazar)?/i);
   if (digits) {
     amount = Number(digits[1]);
     if (digits[2]) amount *= 1000;
@@ -54,7 +83,8 @@ export function parseVoiceEntry(transcript: string): ParsedVoiceEntry {
   }
 
   let date = localISODate();
-  if (text.includes("yesterday") || text.includes("kal")) date = localISODate(addDays(new Date(), -1));
+  if (text.includes("yesterday") || text.includes("kal"))
+    date = localISODate(addDays(new Date(), -1));
 
   const source =
     INCOME_SOURCES.find((item) => text.includes(item.toLowerCase())) ??
@@ -64,7 +94,10 @@ export function parseVoiceEntry(transcript: string): ParsedVoiceEntry {
     EXPENSE_CATEGORIES.find((item) => text.includes(item.name.toLowerCase()))?.name ??
     (text.includes("petrol") || text.includes("diesel") || text.includes("cng")
       ? "Fuel"
-      : text.includes("lunch") || text.includes("dinner") || text.includes("tea") || text.includes("breakfast")
+      : text.includes("lunch") ||
+          text.includes("dinner") ||
+          text.includes("tea") ||
+          text.includes("breakfast")
         ? "Food"
         : text.includes("mobile") || text.includes("data")
           ? "Recharge"

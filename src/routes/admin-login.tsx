@@ -61,9 +61,7 @@ function AdminLoginPage() {
           <div className="inline-grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-lg">
             <Shield className="h-7 w-7" />
           </div>
-          <h1 className="mt-4 text-2xl font-bold tracking-tight text-gray-900">
-            {APP_NAME} Admin
-          </h1>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-gray-900">{APP_NAME} Admin</h1>
           <p className="mt-1 text-sm text-gray-500">Super Admin Panel Access</p>
         </div>
 

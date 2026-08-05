@@ -11,7 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useProfile, useUpdateProfile } from "@/hooks/useGigSaveData";
 import { authService } from "@/services/authService";
 import { LANGUAGES, OCCUPATIONS } from "@/constants/app";
@@ -21,7 +27,10 @@ export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
       { title: "Settings — GigSave" },
-      { name: "description", content: "Manage your GigSave profile, currency, language, budget and notifications." },
+      {
+        name: "description",
+        content: "Manage your GigSave profile, currency, language, budget and notifications.",
+      },
       { property: "og:title", content: "Settings — GigSave" },
       { property: "og:description", content: "Personalise your GigSave account." },
     ],
@@ -109,7 +118,10 @@ function SettingsPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        <SectionHeading title="Settings" description="Your profile, money preferences and reminders." />
+        <SectionHeading
+          title="Settings"
+          description="Your profile, money preferences and reminders."
+        />
 
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Loading your settings…</p>
@@ -203,7 +215,9 @@ function SettingsPage() {
                     inputMode="decimal"
                     placeholder="15000"
                     value={form.monthly_expense_budget}
-                    onChange={(e) => setForm((s) => ({ ...s, monthly_expense_budget: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, monthly_expense_budget: e.target.value }))
+                    }
                   />
                   <p className="text-xs text-muted-foreground">Set 0 to turn the budget off.</p>
                 </div>
@@ -215,11 +229,15 @@ function SettingsPage() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium">In-app notifications</p>
-                  <p className="text-xs text-muted-foreground">Milestones, goal wins and savings nudges.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Milestones, goal wins and savings nudges.
+                  </p>
                 </div>
                 <Switch
                   checked={form.notifications_enabled}
-                  onCheckedChange={(checked) => setForm((s) => ({ ...s, notifications_enabled: checked }))}
+                  onCheckedChange={(checked) =>
+                    setForm((s) => ({ ...s, notifications_enabled: checked }))
+                  }
                   aria-label="Toggle notifications"
                 />
               </div>
@@ -227,11 +245,15 @@ function SettingsPage() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium">Daily reminder</p>
-                  <p className="text-xs text-muted-foreground">A nudge to record the day's earnings.</p>
+                  <p className="text-xs text-muted-foreground">
+                    A nudge to record the day's earnings.
+                  </p>
                 </div>
                 <Switch
                   checked={form.daily_reminder_enabled}
-                  onCheckedChange={(checked) => setForm((s) => ({ ...s, daily_reminder_enabled: checked }))}
+                  onCheckedChange={(checked) =>
+                    setForm((s) => ({ ...s, daily_reminder_enabled: checked }))
+                  }
                   aria-label="Toggle daily reminder"
                 />
               </div>
@@ -239,11 +261,19 @@ function SettingsPage() {
 
             <div className="flex flex-wrap gap-3">
               <Button type="submit" variant="hero" disabled={updateProfile.isPending}>
-                {updateProfile.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                {updateProfile.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4" />
+                )}
                 Save changes
               </Button>
               <Button type="button" variant="outline" onClick={handleSignOut} disabled={signingOut}>
-                {signingOut ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
+                {signingOut ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <LogOut className="h-4 w-4" />
+                )}
                 Sign out
               </Button>
             </div>

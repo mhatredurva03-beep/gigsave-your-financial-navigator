@@ -81,7 +81,11 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
                   ) : (
                     <>
                       {unread > 0 ? (
-                        <Button variant="ghost" size="sm" onClick={() => markRead.mutate(undefined)}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => markRead.mutate(undefined)}
+                        >
                           Mark all as read
                         </Button>
                       ) : null}
@@ -118,7 +122,9 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
-                <DropdownMenuLabel className="truncate">{profile?.full_name ?? "Your account"}</DropdownMenuLabel>
+                <DropdownMenuLabel className="truncate">
+                  {profile?.full_name ?? "Your account"}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link to="/settings">Settings</Link>

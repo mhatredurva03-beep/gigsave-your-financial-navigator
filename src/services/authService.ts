@@ -37,12 +37,21 @@ export const authService = {
     const { error } = await supabase.auth.signOut();
     if (error) throw new Error(error.message);
   },
+
+  async resendConfirmation(email: string) {
+    const { error } = await supabase.auth.resend({ type: "signup", email });
+    if (error) throw new Error(error.message);
+  },
 };
 
 export const profileService = {
   async get(): Promise<Profile | null> {
     const userId = await requireUserId();
-    const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
+      .maybeSingle();
     if (error) throw new Error(`Could not load profile: ${error.message}`);
     return data;
   },

@@ -7,7 +7,15 @@ import { expenseService } from "@/services/expenseService";
 import { jarService } from "@/services/jarService";
 import { goalService } from "@/services/goalService";
 import { notificationService } from "@/services/notificationService";
-import type { ExpenseInsert, ExpenseUpdate, GoalInsert, GoalUpdate, JarInsert, JarUpdate, ProfileUpdate } from "@/services/types";
+import type {
+  ExpenseInsert,
+  ExpenseUpdate,
+  GoalInsert,
+  GoalUpdate,
+  JarInsert,
+  JarUpdate,
+  ProfileUpdate,
+} from "@/services/types";
 
 export const queryKeys = {
   profile: ["profile"] as const,
@@ -38,7 +46,11 @@ function onError(error: unknown) {
 }
 
 export function useProfile() {
-  return useQuery({ queryKey: queryKeys.profile, queryFn: () => profileService.get(), staleTime: 60_000 });
+  return useQuery({
+    queryKey: queryKeys.profile,
+    queryFn: () => profileService.get(),
+    staleTime: 60_000,
+  });
 }
 
 export function useUpdateProfile() {
@@ -54,23 +66,43 @@ export function useUpdateProfile() {
 }
 
 export function useIncome() {
-  return useQuery({ queryKey: queryKeys.income, queryFn: () => incomeService.list(), staleTime: 30_000 });
+  return useQuery({
+    queryKey: queryKeys.income,
+    queryFn: () => incomeService.list(),
+    staleTime: 30_000,
+  });
 }
 
 export function useExpenses() {
-  return useQuery({ queryKey: queryKeys.expenses, queryFn: () => expenseService.list(), staleTime: 30_000 });
+  return useQuery({
+    queryKey: queryKeys.expenses,
+    queryFn: () => expenseService.list(),
+    staleTime: 30_000,
+  });
 }
 
 export function useJars() {
-  return useQuery({ queryKey: queryKeys.jars, queryFn: () => jarService.list(), staleTime: 30_000 });
+  return useQuery({
+    queryKey: queryKeys.jars,
+    queryFn: () => jarService.list(),
+    staleTime: 30_000,
+  });
 }
 
 export function useGoals() {
-  return useQuery({ queryKey: queryKeys.goals, queryFn: () => goalService.list(), staleTime: 30_000 });
+  return useQuery({
+    queryKey: queryKeys.goals,
+    queryFn: () => goalService.list(),
+    staleTime: 30_000,
+  });
 }
 
 export function useAllocations() {
-  return useQuery({ queryKey: queryKeys.allocations, queryFn: () => jarService.allocations(), staleTime: 30_000 });
+  return useQuery({
+    queryKey: queryKeys.allocations,
+    queryFn: () => jarService.allocations(),
+    staleTime: 30_000,
+  });
 }
 
 export function useNotifications() {
@@ -84,8 +116,12 @@ export function useNotifications() {
 export function useAddIncome() {
   const invalidate = useInvalidateFinancials();
   return useMutation({
-    mutationFn: (input: { amount: number; source: string; notes?: string | null; income_date: string }) =>
-      incomeService.create(input),
+    mutationFn: (input: {
+      amount: number;
+      source: string;
+      notes?: string | null;
+      income_date: string;
+    }) => incomeService.create(input),
     onSuccess: () => {
       invalidate();
       toast.success("Income recorded and split into your jars");
@@ -109,8 +145,13 @@ export function useDeleteIncome() {
 export function useUpdateIncome() {
   const invalidate = useInvalidateFinancials();
   return useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: { source?: string; notes?: string | null; income_date?: string } }) =>
-      incomeService.update(id, patch),
+    mutationFn: ({
+      id,
+      patch,
+    }: {
+      id: string;
+      patch: { source?: string; notes?: string | null; income_date?: string };
+    }) => incomeService.update(id, patch),
     onSuccess: () => {
       invalidate();
       toast.success("Income updated");
@@ -134,7 +175,8 @@ export function useAddExpense() {
 export function useUpdateExpense() {
   const invalidate = useInvalidateFinancials();
   return useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: ExpenseUpdate }) => expenseService.update(id, patch),
+    mutationFn: ({ id, patch }: { id: string; patch: ExpenseUpdate }) =>
+      expenseService.update(id, patch),
     onSuccess: () => {
       invalidate();
       toast.success("Expense updated");
@@ -159,7 +201,9 @@ export function useSaveJar() {
   const invalidate = useInvalidateFinancials();
   return useMutation({
     mutationFn: ({ id, input }: { id?: string; input: Omit<JarInsert, "user_id"> | JarUpdate }) =>
-      id ? jarService.update(id, input as JarUpdate) : jarService.create(input as Omit<JarInsert, "user_id">),
+      id
+        ? jarService.update(id, input as JarUpdate)
+        : jarService.create(input as Omit<JarInsert, "user_id">),
     onSuccess: (_data, variables) => {
       invalidate();
       toast.success(variables.id ? "Jar updated" : "Jar created");
@@ -183,8 +227,16 @@ export function useDeleteJar() {
 export function useSaveGoal() {
   const invalidate = useInvalidateFinancials();
   return useMutation({
-    mutationFn: ({ id, input }: { id?: string; input: Omit<GoalInsert, "user_id"> | GoalUpdate }) =>
-      id ? goalService.update(id, input as GoalUpdate) : goalService.create(input as Omit<GoalInsert, "user_id">),
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id?: string;
+      input: Omit<GoalInsert, "user_id"> | GoalUpdate;
+    }) =>
+      id
+        ? goalService.update(id, input as GoalUpdate)
+        : goalService.create(input as Omit<GoalInsert, "user_id">),
     onSuccess: (_data, variables) => {
       invalidate();
       toast.success(variables.id ? "Goal updated" : "Goal created");
@@ -208,7 +260,8 @@ export function useDeleteGoal() {
 export function useMarkNotificationsRead() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id?: string) => (id ? notificationService.markRead(id) : notificationService.markAllRead()),
+    mutationFn: (id?: string) =>
+      id ? notificationService.markRead(id) : notificationService.markAllRead(),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.notifications }),
     onError,
   });

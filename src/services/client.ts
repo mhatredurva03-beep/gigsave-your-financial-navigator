@@ -1,7 +1,10 @@
 import { supabase } from "@/integrations/supabase/client";
 
 /** Thin wrapper so every service surfaces a readable error message. */
-export function unwrap<T>(result: { data: T | null; error: { message: string } | null }, context: string): T {
+export function unwrap<T>(
+  result: { data: T | null; error: { message: string } | null },
+  context: string,
+): T {
   if (result.error) {
     throw new Error(`${context}: ${result.error.message}`);
   }

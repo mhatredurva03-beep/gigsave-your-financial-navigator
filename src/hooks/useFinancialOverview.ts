@@ -1,6 +1,13 @@
 import { useMemo } from "react";
 
-import { useAllocations, useExpenses, useGoals, useIncome, useJars, useProfile } from "./useGigSaveData";
+import {
+  useAllocations,
+  useExpenses,
+  useGoals,
+  useIncome,
+  useJars,
+  useProfile,
+} from "./useGigSaveData";
 import { localISODate, toNumber, addDays } from "@/utils/format";
 import { financialHealthScore, generateInsights, sumAmount, withinLastDays } from "@/utils/finance";
 import type { Transaction } from "@/services/types";
@@ -38,7 +45,10 @@ export function useFinancialOverview() {
 
     const todayEarnings = sumAmount(todayIncomeRows);
     const todayExpenses = sumAmount(todayExpenseRows);
-    const todaySavings = todayIncomeRows.reduce((total, row) => total + toNumber(row.allocated_amount), 0);
+    const todaySavings = todayIncomeRows.reduce(
+      (total, row) => total + toNumber(row.allocated_amount),
+      0,
+    );
 
     const totalEarned = sumAmount(income);
     const totalSpent = sumAmount(expenses);
@@ -70,7 +80,9 @@ export function useFinancialOverview() {
         note: row.note,
         createdAt: row.created_at,
       })),
-    ].sort((a, b) => (a.date === b.date ? b.createdAt.localeCompare(a.createdAt) : b.date.localeCompare(a.date)));
+    ].sort((a, b) =>
+      a.date === b.date ? b.createdAt.localeCompare(a.createdAt) : b.date.localeCompare(a.date),
+    );
 
     const health = financialHealthScore({ income, expenses, goals, jars });
     const insights = generateInsights({ income, expenses, goals, jars, health });

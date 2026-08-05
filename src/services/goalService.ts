@@ -5,7 +5,11 @@ export const goalService = {
   async list(): Promise<Goal[]> {
     const userId = await requireUserId();
     return unwrap(
-      await supabase.from("goals").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
+      await supabase
+        .from("goals")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false }),
       "Could not load goals",
     );
   },
@@ -13,7 +17,11 @@ export const goalService = {
   async create(input: Omit<GoalInsert, "user_id">): Promise<Goal> {
     const userId = await requireUserId();
     return unwrap(
-      await supabase.from("goals").insert({ ...input, user_id: userId }).select("*").single(),
+      await supabase
+        .from("goals")
+        .insert({ ...input, user_id: userId })
+        .select("*")
+        .single(),
       "Could not create goal",
     );
   },
@@ -21,7 +29,13 @@ export const goalService = {
   async update(id: string, patch: GoalUpdate): Promise<Goal> {
     const userId = await requireUserId();
     return unwrap(
-      await supabase.from("goals").update(patch).eq("id", id).eq("user_id", userId).select("*").single(),
+      await supabase
+        .from("goals")
+        .update(patch)
+        .eq("id", id)
+        .eq("user_id", userId)
+        .select("*")
+        .single(),
       "Could not update goal",
     );
   },

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader2, Plus, Trash2, Wallet } from "lucide-react";
+import { Loader2, Pencil, Plus, Trash2, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -12,7 +12,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,18 +30,42 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useAddIncome, useDeleteIncome, useIncome, useJars } from "@/hooks/useGigSaveData";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  useAddIncome,
+  useDeleteIncome,
+  useIncome,
+  useJars,
+  useUpdateIncome,
+} from "@/hooks/useGigSaveData";
 import { useProfile } from "@/hooks/useGigSaveData";
 import { INCOME_SOURCES } from "@/constants/app";
 import { formatCurrency, localISODate, relativeDay, toNumber } from "@/utils/format";
 import { previewAllocation } from "@/utils/finance";
+import type { Income } from "@/services/types";
 
 export const Route = createFileRoute("/_authenticated/income")({
   component: IncomePage,
 });
 
-const schema = z.object({
-  amount: z.coerce.number().positive("Enter an amount above zero").max(10_000_000, "That amount looks too large"),
+const addSchema = z.object({
+  amount: z.coerce
+    .number()
+    .positive("Enter an amount above zero")
+    .max(10_000_000, "That amount looks too large"),
+  source: z.string().trim().min(1, "Pick a source").max(60),
+  income_date: z.string().min(1, "Pick a date"),
+  notes: z.string().trim().max(280, "Keep notes under 280 characters").optional(),
+});
+
+const editSchema = z.object({
   source: z.string().trim().min(1, "Pick a source").max(60),
   income_date: z.string().min(1, "Pick a date"),
   notes: z.string().trim().max(280, "Keep notes under 280 characters").optional(),
@@ -47,6 +77,7 @@ function IncomePage() {
   const { data: profile } = useProfile();
   const addIncome = useAddIncome();
   const deleteIncome = useDeleteIncome();
+  const updateIncome = useUpdateIncome();
   const currency = profile?.preferred_currency ?? "INR";
 
   const [form, setForm] = useState({
@@ -56,11 +87,19 @@ function IncomePage() {
     notes: "",
   });
 
-  const preview = useMemo(() => previewAllocation(Number(form.amount) || 0, jars), [form.amount, jars]);
+  // Edit dialog state
+  const [editOpen, setEditOpen] = useState(false);
+  const [editingRow, setEditingRow] = useState<Income | null>(null);
+  const [editForm, setEditForm] = useState({ source: "", income_date: "", notes: "" });
+
+  const preview = useMemo(
+    () => previewAllocation(Number(form.amount) || 0, jars),
+    [form.amount, jars],
+  );
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const parsed = schema.safeParse(form);
+    const parsed = addSchema.safeParse(form);
     if (!parsed.success) return toast.error(parsed.error.issues[0].message);
 
     addIncome.mutate(
@@ -74,10 +113,42 @@ function IncomePage() {
     );
   }
 
+  function openEdit(row: Income) {
+    setEditingRow(row);
+    setEditForm({
+      source: row.source,
+      income_date: row.income_date,
+      notes: row.notes ?? "",
+    });
+    setEditOpen(true);
+  }
+
+  function handleEditSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    if (!editingRow) return;
+    const parsed = editSchema.safeParse(editForm);
+    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+
+    updateIncome.mutate(
+      {
+        id: editingRow.id,
+        patch: {
+          source: parsed.data.source,
+          income_date: parsed.data.income_date,
+          notes: parsed.data.notes || null,
+        },
+      },
+      { onSuccess: () => setEditOpen(false) },
+    );
+  }
+
   return (
     <AppShell>
       <div className="space-y-6">
-        <SectionHeading title="Income" description="Log what you earned — savings happen automatically." />
+        <SectionHeading
+          title="Income"
+          description="Log what you earned — savings happen automatically."
+        />
 
         <GlassCard>
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -94,7 +165,10 @@ function IncomePage() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="source">Source</Label>
-                <Select value={form.source} onValueChange={(value) => setForm((s) => ({ ...s, source: value }))}>
+                <Select
+                  value={form.source}
+                  onValueChange={(value) => setForm((s) => ({ ...s, source: value }))}
+                >
                   <SelectTrigger id="source">
                     <SelectValue />
                   </SelectTrigger>
@@ -140,7 +214,9 @@ function IncomePage() {
                       <span className="truncate">
                         {line.jarName} · {line.percentage}%
                       </span>
-                      <span className="shrink-0 font-semibold">{formatCurrency(line.amount, currency)}</span>
+                      <span className="shrink-0 font-semibold">
+                        {formatCurrency(line.amount, currency)}
+                      </span>
                     </li>
                   ))}
                   <li className="flex items-center justify-between gap-3 border-t border-border/60 pt-1 font-semibold">
@@ -153,7 +229,11 @@ function IncomePage() {
 
             <div className="flex flex-wrap gap-3">
               <Button type="submit" variant="hero" disabled={addIncome.isPending}>
-                {addIncome.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                {addIncome.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Plus className="h-4 w-4" />
+                )}
                 Add income
               </Button>
               <VoiceCapture
@@ -195,9 +275,21 @@ function IncomePage() {
                   <p className="shrink-0 text-sm font-semibold text-teal">
                     +{formatCurrency(toNumber(row.amount), currency)}
                   </p>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`Edit income from ${row.source}`}
+                    onClick={() => openEdit(row)}
+                  >
+                    <Pencil className="h-4 w-4 text-muted-foreground" />
+                  </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="icon" aria-label={`Delete income from ${row.source}`}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={`Delete income from ${row.source}`}
+                      >
                         <Trash2 className="h-4 w-4 text-muted-foreground" />
                       </Button>
                     </AlertDialogTrigger>
@@ -210,7 +302,9 @@ function IncomePage() {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => deleteIncome.mutate(row.id)}>Delete</AlertDialogAction>
+                        <AlertDialogAction onClick={() => deleteIncome.mutate(row.id)}>
+                          Delete
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -220,6 +314,67 @@ function IncomePage() {
           )}
         </section>
       </div>
+
+      {/* Edit Income Dialog */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit income</DialogTitle>
+            <DialogDescription>
+              Update source, date or notes. To change the amount, delete this entry and add a new
+              one so jar balances stay correct.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form className="space-y-4" onSubmit={handleEditSubmit}>
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-source">Source</Label>
+              <Select
+                value={editForm.source}
+                onValueChange={(value) => setEditForm((s) => ({ ...s, source: value }))}
+              >
+                <SelectTrigger id="edit-source">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {INCOME_SOURCES.map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-income-date">Date</Label>
+              <Input
+                id="edit-income-date"
+                type="date"
+                max={localISODate()}
+                value={editForm.income_date}
+                onChange={(e) => setEditForm((s) => ({ ...s, income_date: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-notes">Notes (optional)</Label>
+              <Textarea
+                id="edit-notes"
+                rows={2}
+                placeholder="12 orders, evening shift"
+                value={editForm.notes}
+                onChange={(e) => setEditForm((s) => ({ ...s, notes: e.target.value }))}
+              />
+            </div>
+
+            <DialogFooter>
+              <Button type="submit" variant="hero" disabled={updateIncome.isPending}>
+                {updateIncome.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                Save changes
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </AppShell>
   );
 }

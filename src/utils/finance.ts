@@ -16,7 +16,10 @@ export interface AllocationLine {
 }
 
 /** Preview of how an income amount will be split across the user's jars. */
-export function previewAllocation(amount: number, jars: Jar[]): {
+export function previewAllocation(
+  amount: number,
+  jars: Jar[],
+): {
   lines: AllocationLine[];
   totalSaved: number;
   available: number;
@@ -57,14 +60,19 @@ export function withinLastDays<T>(rows: T[], key: keyof T, days: number): T[] {
 }
 
 export function goalProgress(goal: Goal): number {
-  return clampPercent((toNumber(goal.current_amount) / Math.max(1, toNumber(goal.target_amount))) * 100);
+  return clampPercent(
+    (toNumber(goal.current_amount) / Math.max(1, toNumber(goal.target_amount))) * 100,
+  );
 }
 
 /**
  * Estimated completion date for a goal, based on the average daily amount
  * flowing into its linked jar (or overall daily savings when unlinked).
  */
-export function estimateGoalCompletion(goal: Goal, dailySavingsRate: number): {
+export function estimateGoalCompletion(
+  goal: Goal,
+  dailySavingsRate: number,
+): {
   daysLeft: number | null;
   date: Date | null;
   label: string;
@@ -130,7 +138,15 @@ export function financialHealthScore(input: {
 
   const score = Math.min(100, savingsScore + goalScore + expenseScore + consistencyScore);
   const label =
-    score >= 80 ? "Excellent" : score >= 60 ? "Healthy" : score >= 40 ? "Fair" : score > 0 ? "Needs work" : "Get started";
+    score >= 80
+      ? "Excellent"
+      : score >= 60
+        ? "Healthy"
+        : score >= 40
+          ? "Fair"
+          : score > 0
+            ? "Needs work"
+            : "Get started";
 
   return { score, savingsScore, goalScore, expenseScore, consistencyScore, label };
 }
@@ -196,8 +212,12 @@ export function generateInsights(input: {
     .filter((goal) => !goal.is_completed)
     .sort((a, b) => goalProgress(b) - goalProgress(a))[0];
   if (activeGoal) {
-    const remaining = Math.max(0, toNumber(activeGoal.target_amount) - toNumber(activeGoal.current_amount));
-    const dailySaved = thisWeek.reduce((total, row) => total + toNumber(row.allocated_amount), 0) / 7;
+    const remaining = Math.max(
+      0,
+      toNumber(activeGoal.target_amount) - toNumber(activeGoal.current_amount),
+    );
+    const dailySaved =
+      thisWeek.reduce((total, row) => total + toNumber(row.allocated_amount), 0) / 7;
     if (dailySaved > 0) {
       const days = Math.ceil(remaining / dailySaved);
       const faster = Math.ceil(remaining / (dailySaved + 100));

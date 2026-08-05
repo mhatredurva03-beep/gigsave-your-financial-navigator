@@ -93,7 +93,9 @@ function LandingPage() {
             Turn irregular gig income into{" "}
             <span className="text-gradient-primary">steady savings</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">{APP_TAGLINE}</p>
+          <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
+            {APP_TAGLINE}
+          </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button asChild variant="hero" size="pill" disabled={!checked}>
               <Link to="/auth">
@@ -119,7 +121,9 @@ function LandingPage() {
         </section>
 
         <section className="mt-16 rounded-3xl gradient-primary px-6 py-12 text-center text-white shadow-glow">
-          <h2 className="text-2xl font-bold sm:text-3xl">Your next payout can start a savings habit</h2>
+          <h2 className="text-2xl font-bold sm:text-3xl">
+            Your next payout can start a savings habit
+          </h2>
           <p className="mx-auto mt-3 max-w-lg text-sm opacity-90">
             Set up your jars once. GigSave handles the discipline from there.
           </p>

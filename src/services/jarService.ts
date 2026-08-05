@@ -5,7 +5,11 @@ export const jarService = {
   async list(): Promise<Jar[]> {
     const userId = await requireUserId();
     return unwrap(
-      await supabase.from("jars").select("*").eq("user_id", userId).order("created_at", { ascending: true }),
+      await supabase
+        .from("jars")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: true }),
       "Could not load savings jars",
     );
   },
@@ -13,7 +17,11 @@ export const jarService = {
   async create(input: Omit<JarInsert, "user_id">): Promise<Jar> {
     const userId = await requireUserId();
     return unwrap(
-      await supabase.from("jars").insert({ ...input, user_id: userId }).select("*").single(),
+      await supabase
+        .from("jars")
+        .insert({ ...input, user_id: userId })
+        .select("*")
+        .single(),
       "Could not create jar",
     );
   },
@@ -21,7 +29,13 @@ export const jarService = {
   async update(id: string, patch: JarUpdate): Promise<Jar> {
     const userId = await requireUserId();
     return unwrap(
-      await supabase.from("jars").update(patch).eq("id", id).eq("user_id", userId).select("*").single(),
+      await supabase
+        .from("jars")
+        .update(patch)
+        .eq("id", id)
+        .eq("user_id", userId)
+        .select("*")
+        .single(),
       "Could not update jar",
     );
   },

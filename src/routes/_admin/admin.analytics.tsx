@@ -84,21 +84,33 @@ function AdminAnalyticsPage() {
             <BarItem
               label="Total Income"
               value={stats?.total_income ?? 0}
-              maxValue={Math.max(stats?.total_income ?? 1, stats?.total_expenses ?? 1, stats?.total_savings ?? 1)}
+              maxValue={Math.max(
+                stats?.total_income ?? 1,
+                stats?.total_expenses ?? 1,
+                stats?.total_savings ?? 1,
+              )}
               color="bg-teal-500"
               isLoading={statsLoading}
             />
             <BarItem
               label="Total Expenses"
               value={stats?.total_expenses ?? 0}
-              maxValue={Math.max(stats?.total_income ?? 1, stats?.total_expenses ?? 1, stats?.total_savings ?? 1)}
+              maxValue={Math.max(
+                stats?.total_income ?? 1,
+                stats?.total_expenses ?? 1,
+                stats?.total_savings ?? 1,
+              )}
               color="bg-pink-500"
               isLoading={statsLoading}
             />
             <BarItem
               label="Total Savings"
               value={stats?.total_savings ?? 0}
-              maxValue={Math.max(stats?.total_income ?? 1, stats?.total_expenses ?? 1, stats?.total_savings ?? 1)}
+              maxValue={Math.max(
+                stats?.total_income ?? 1,
+                stats?.total_expenses ?? 1,
+                stats?.total_savings ?? 1,
+              )}
               color="bg-violet-500"
               isLoading={statsLoading}
             />
@@ -122,7 +134,9 @@ function AdminAnalyticsPage() {
               {statsLoading ? (
                 <Skeleton className="h-5 w-12" />
               ) : (
-                <span className="text-sm font-bold text-green-600">{stats?.completed_goals ?? 0}</span>
+                <span className="text-sm font-bold text-green-600">
+                  {stats?.completed_goals ?? 0}
+                </span>
               )}
             </div>
             <div className="flex items-center justify-between">
@@ -234,7 +248,9 @@ function MetricCard({
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-5">
       <div className="flex items-center gap-3">
-        <span className={`grid h-9 w-9 place-items-center rounded-lg ${colorMap[color] || colorMap.violet}`}>
+        <span
+          className={`grid h-9 w-9 place-items-center rounded-lg ${colorMap[color] || colorMap.violet}`}
+        >
           <Icon className="h-4 w-4" />
         </span>
         <p className="text-xs font-medium text-gray-500">{label}</p>

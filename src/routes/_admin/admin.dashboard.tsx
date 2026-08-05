@@ -174,7 +174,9 @@ function StatCard({
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-5">
       <div className="flex items-center gap-3">
-        <span className={`grid h-10 w-10 place-items-center rounded-lg ${colorMap[color] || colorMap.violet}`}>
+        <span
+          className={`grid h-10 w-10 place-items-center rounded-lg ${colorMap[color] || colorMap.violet}`}
+        >
           <Icon className="h-5 w-5" />
         </span>
         <p className="text-sm font-medium text-gray-600">{label}</p>
@@ -184,7 +186,9 @@ function StatCard({
       ) : (
         <div className="mt-3">
           <p className="text-2xl font-bold text-gray-900">
-            {isCurrency ? `₹${(value ?? 0).toLocaleString("en-IN")}` : (value ?? 0).toLocaleString()}
+            {isCurrency
+              ? `₹${(value ?? 0).toLocaleString("en-IN")}`
+              : (value ?? 0).toLocaleString()}
           </p>
           {subtitle && <p className="mt-0.5 text-xs text-gray-500">{subtitle}</p>}
         </div>

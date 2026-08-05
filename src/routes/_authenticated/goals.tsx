@@ -10,7 +10,13 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { DynamicIcon } from "@/components/ui/dynamic-icon";
 import { ProgressRing } from "@/components/ui/progress-ring";
 import {
@@ -34,9 +40,16 @@ export const Route = createFileRoute("/_authenticated/goals")({
   head: () => ({
     meta: [
       { title: "Savings Goals — GigSave" },
-      { name: "description", content: "Set savings goals, link them to a jar and watch GigSave estimate your finish date." },
+      {
+        name: "description",
+        content:
+          "Set savings goals, link them to a jar and watch GigSave estimate your finish date.",
+      },
       { property: "og:title", content: "Savings Goals — GigSave" },
-      { property: "og:description", content: "Track progress toward every goal with automatic jar funding." },
+      {
+        property: "og:description",
+        content: "Track progress toward every goal with automatic jar funding.",
+      },
     ],
   }),
   component: GoalsPage,
@@ -104,8 +117,12 @@ function GoalsPage() {
           target_amount: parsed.data.target_amount,
           deadline: parsed.data.deadline || null,
           jar_id: jarId,
-          current_amount: linkedJar ? Math.min(parsed.data.target_amount, toNumber(linkedJar.balance)) : 0,
-          is_completed: linkedJar ? toNumber(linkedJar.balance) >= parsed.data.target_amount : false,
+          current_amount: linkedJar
+            ? Math.min(parsed.data.target_amount, toNumber(linkedJar.balance))
+            : 0,
+          is_completed: linkedJar
+            ? toNumber(linkedJar.balance) >= parsed.data.target_amount
+            : false,
         },
       },
       { onSuccess: () => setOpen(false) },
@@ -133,7 +150,11 @@ function GoalsPage() {
             icon={<Target className="h-8 w-8" />}
             title="No goals yet"
             description="A new phone, a bike service, an emergency cushion — name it and start saving."
-            action={<Button variant="hero" onClick={openCreate}>Create a goal</Button>}
+            action={
+              <Button variant="hero" onClick={openCreate}>
+                Create a goal
+              </Button>
+            }
           />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
@@ -142,7 +163,10 @@ function GoalsPage() {
               const tone = jar?.color ?? "violet";
               const progress = goalProgress(goal);
               const estimate = estimateGoalCompletion(goal, dailySavingsRate);
-              const remaining = Math.max(0, toNumber(goal.target_amount) - toNumber(goal.current_amount));
+              const remaining = Math.max(
+                0,
+                toNumber(goal.target_amount) - toNumber(goal.current_amount),
+              );
 
               return (
                 <GlassCard key={goal.id} className="space-y-4">
@@ -152,7 +176,10 @@ function GoalsPage() {
                     </ProgressRing>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full" style={toneStyle(tone)}>
+                        <span
+                          className="grid h-7 w-7 shrink-0 place-items-center rounded-full"
+                          style={toneStyle(tone)}
+                        >
                           <DynamicIcon name={goal.icon} className="h-3.5 w-3.5" />
                         </span>
                         <p className="truncate font-semibold">{goal.goal_name}</p>
@@ -173,7 +200,9 @@ function GoalsPage() {
                         )}
                       </p>
                       {goal.deadline ? (
-                        <p className="mt-0.5 text-xs text-muted-foreground">Target date {formatDate(goal.deadline)}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">
+                          Target date {formatDate(goal.deadline)}
+                        </p>
                       ) : null}
                       <p className="mt-0.5 text-xs text-muted-foreground">
                         {jar ? `Funded by ${jar.jar_name}` : "Not linked to a jar"}
@@ -182,7 +211,12 @@ function GoalsPage() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="soft" size="sm" className="flex-1" onClick={() => openEdit(goal)}>
+                    <Button
+                      variant="soft"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => openEdit(goal)}
+                    >
                       Edit
                     </Button>
                     <Button
@@ -205,7 +239,9 @@ function GoalsPage() {
         <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{editingId ? "Edit goal" : "New goal"}</DialogTitle>
-            <DialogDescription>Link a jar so the goal fills automatically with every earning.</DialogDescription>
+            <DialogDescription>
+              Link a jar so the goal fills automatically with every earning.
+            </DialogDescription>
           </DialogHeader>
 
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -244,7 +280,10 @@ function GoalsPage() {
 
             <div className="space-y-1.5">
               <Label htmlFor="goal-jar">Funded by jar</Label>
-              <Select value={form.jar_id} onValueChange={(value) => setForm((s) => ({ ...s, jar_id: value }))}>
+              <Select
+                value={form.jar_id}
+                onValueChange={(value) => setForm((s) => ({ ...s, jar_id: value }))}
+              >
                 <SelectTrigger id="goal-jar">
                   <SelectValue placeholder="Choose a jar" />
                 </SelectTrigger>

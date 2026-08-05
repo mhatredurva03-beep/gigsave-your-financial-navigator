@@ -16,14 +16,7 @@ export const INCOME_SOURCES = [
 ] as const;
 
 export type ExpenseCategory =
-  | "Fuel"
-  | "Food"
-  | "Rent"
-  | "Shopping"
-  | "Medical"
-  | "Recharge"
-  | "Bike Repair"
-  | "Other";
+  "Fuel" | "Food" | "Rent" | "Shopping" | "Medical" | "Recharge" | "Bike Repair" | "Other";
 
 export const EXPENSE_CATEGORIES: { name: ExpenseCategory; icon: string; tone: string }[] = [
   { name: "Fuel", icon: "fuel", tone: "violet" },

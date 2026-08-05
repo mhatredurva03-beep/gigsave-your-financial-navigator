@@ -19,7 +19,11 @@ export const expenseService = {
   async create(input: Omit<ExpenseInsert, "user_id">): Promise<Expense> {
     const userId = await requireUserId();
     return unwrap(
-      await supabase.from("expenses").insert({ ...input, user_id: userId }).select("*").single(),
+      await supabase
+        .from("expenses")
+        .insert({ ...input, user_id: userId })
+        .select("*")
+        .single(),
       "Could not save expense",
     );
   },
@@ -27,7 +31,13 @@ export const expenseService = {
   async update(id: string, patch: ExpenseUpdate): Promise<Expense> {
     const userId = await requireUserId();
     return unwrap(
-      await supabase.from("expenses").update(patch).eq("id", id).eq("user_id", userId).select("*").single(),
+      await supabase
+        .from("expenses")
+        .update(patch)
+        .eq("id", id)
+        .eq("user_id", userId)
+        .select("*")
+        .single(),
       "Could not update expense",
     );
   },

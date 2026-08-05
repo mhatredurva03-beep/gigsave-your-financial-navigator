@@ -1,11 +1,7 @@
 import { cn } from "@/lib/utils";
 
 /** Consistent frosted surface used across cards, sheets and panels. */
-export function GlassCard({
-  className,
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+export function GlassCard({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(

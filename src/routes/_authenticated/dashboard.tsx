@@ -36,15 +36,21 @@ function DashboardPage() {
           <div className="mt-5 grid grid-cols-3 gap-3 text-center">
             <div className="rounded-xl bg-white/15 px-2 py-2.5">
               <p className="text-[11px] uppercase tracking-wide opacity-85">Earned today</p>
-              <p className="mt-0.5 text-sm font-bold">{formatCurrency(overview.todayEarnings, currency)}</p>
+              <p className="mt-0.5 text-sm font-bold">
+                {formatCurrency(overview.todayEarnings, currency)}
+              </p>
             </div>
             <div className="rounded-xl bg-white/15 px-2 py-2.5">
               <p className="text-[11px] uppercase tracking-wide opacity-85">Spent today</p>
-              <p className="mt-0.5 text-sm font-bold">{formatCurrency(overview.todayExpenses, currency)}</p>
+              <p className="mt-0.5 text-sm font-bold">
+                {formatCurrency(overview.todayExpenses, currency)}
+              </p>
             </div>
             <div className="rounded-xl bg-white/15 px-2 py-2.5">
               <p className="text-[11px] uppercase tracking-wide opacity-85">Saved today</p>
-              <p className="mt-0.5 text-sm font-bold">{formatCurrency(overview.todaySavings, currency)}</p>
+              <p className="mt-0.5 text-sm font-bold">
+                {formatCurrency(overview.todaySavings, currency)}
+              </p>
             </div>
           </div>
         </GlassCard>
@@ -64,14 +70,23 @@ function DashboardPage() {
 
         <GlassCard>
           <div className="flex items-center gap-5">
-            <ProgressRing value={overview.health.score} tone="teal" label={`Financial health ${overview.health.score} of 100`}>
+            <ProgressRing
+              value={overview.health.score}
+              tone="teal"
+              label={`Financial health ${overview.health.score} of 100`}
+            >
               <span className="text-xl font-extrabold">{overview.health.score}</span>
-              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">score</span>
+              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                score
+              </span>
             </ProgressRing>
             <div className="min-w-0">
               <h2 className="text-base font-semibold">Financial health: {overview.health.label}</h2>
               <p className="mt-1 text-sm text-muted-foreground">{`${overview.health.savingsScore + overview.health.expenseScore}/50 on saving and spending control.`}</p>
-              <Link to="/analytics" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+              <Link
+                to="/analytics"
+                className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+              >
                 <TrendingUp className="h-3.5 w-3.5" /> See analytics
               </Link>
             </div>
@@ -110,9 +125,13 @@ function DashboardPage() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold">{jar.jar_name}</p>
-                    <p className="text-xs text-muted-foreground">{toNumber(jar.percentage)}% of every income</p>
+                    <p className="text-xs text-muted-foreground">
+                      {toNumber(jar.percentage)}% of every income
+                    </p>
                   </div>
-                  <p className="shrink-0 text-sm font-bold">{formatCurrency(toNumber(jar.balance), currency)}</p>
+                  <p className="shrink-0 text-sm font-bold">
+                    {formatCurrency(toNumber(jar.balance), currency)}
+                  </p>
                 </GlassCard>
               ))}
             </div>
