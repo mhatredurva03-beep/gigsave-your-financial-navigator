@@ -8,7 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { authService } from "@/services/authService";
 import { lovable } from "@/integrations/lovable";
 import { APP_NAME, APP_TAGLINE, OCCUPATIONS } from "@/constants/app";
@@ -19,7 +25,8 @@ export const Route = createFileRoute("/auth")({
       { title: "Sign in to GigSave — Track Earnings & Savings" },
       {
         name: "description",
-        content: "Sign in or create your free GigSave account to track gig earnings, expenses and savings goals.",
+        content:
+          "Sign in or create your free GigSave account to track gig earnings, expenses and savings goals.",
       },
       { property: "og:title", content: "Sign in to GigSave" },
       {
@@ -116,7 +123,9 @@ function AuthPage() {
       } else {
         // Email confirmation required
         setUnconfirmedEmail(parsed.data.email);
-        toast.success("Account created! Check your inbox and click the confirmation link to sign in.");
+        toast.success(
+          "Account created! Check your inbox and click the confirmation link to sign in.",
+        );
       }
     } catch (error) {
       const raw = error instanceof Error ? error.message : "Could not create your account";
@@ -129,7 +138,9 @@ function AuthPage() {
   async function handleGoogle() {
     setPending("google");
     try {
-      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
       if (result.error) {
         toast.error("Google sign-in failed. Please try again.");
         return;
@@ -188,10 +199,13 @@ function AuthPage() {
           <div className="mb-4 flex items-start gap-3 rounded-2xl border border-amber/40 bg-amber/10 p-4">
             <MailCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-amber-900 dark:text-amber-200">Confirm your email</p>
+              <p className="text-sm font-semibold text-amber-900 dark:text-amber-200">
+                Confirm your email
+              </p>
               <p className="mt-0.5 text-xs text-amber-800 dark:text-amber-300">
-                We sent a confirmation link to <span className="font-medium">{unconfirmedEmail}</span>. Click it to
-                activate your account, then sign in.
+                We sent a confirmation link to{" "}
+                <span className="font-medium">{unconfirmedEmail}</span>. Click it to activate your
+                account, then sign in.
               </p>
               <Button
                 variant="ghost"
@@ -303,7 +317,11 @@ function AuthPage() {
                   />
                 </div>
                 <Button type="submit" variant="hero" className="w-full" disabled={pending !== null}>
-                  {pending === "signup" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create free account"}
+                  {pending === "signup" ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Create free account"
+                  )}
                 </Button>
               </form>
             </TabsContent>
@@ -315,8 +333,17 @@ function AuthPage() {
             <span className="h-px flex-1 bg-border" />
           </div>
 
-          <Button variant="outline" className="w-full" onClick={handleGoogle} disabled={pending !== null}>
-            {pending === "google" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue with Google"}
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={handleGoogle}
+            disabled={pending !== null}
+          >
+            {pending === "google" ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              "Continue with Google"
+            )}
           </Button>
         </div>
       </div>

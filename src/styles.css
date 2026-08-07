@@ -1,4 +1,4 @@
-@import "tailwindcss" source(none);
+@import "tailwindcss";
 @source "../src";
 @import "tw-animate-css";
 
@@ -244,7 +244,7 @@
   background-image: var(--gradient-warm);
 }
 
-@utility text-gradient {
+@utility text-gradient-primary {
   background-image: var(--gradient-primary);
   background-clip: text;
   -webkit-background-clip: text;

@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
 import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
@@ -86,6 +87,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "GigSave helps gig workers track daily earnings, control expenses and save automatically into goal jars.",
       },
       { name: "author", content: "GigSave" },
+      { name: "theme-color", content: "#7c3aed" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "GigSave" },
       { property: "og:title", content: "GigSave — Smart Expense & Goal Tracker" },
       {
         property: "og:description",
@@ -102,7 +108,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico.jpeg", type: "image/jpeg" }
+      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { rel: "icon", href: "/icon-512.png", type: "image/png", sizes: "512x512" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
     ],
   }),
   shellComponent: RootShell,
@@ -149,6 +159,7 @@ function RootComponent() {
       <AuthSync />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <PWAUpdatePrompt />
       <Toaster position="top-center" richColors closeButton />
     </QueryClientProvider>
   );
