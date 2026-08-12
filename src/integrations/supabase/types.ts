@@ -214,6 +214,36 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_events: {
+        Row: {
+          created_at: string
+          email_sent: boolean
+          event_type: string
+          id: string
+          period: string
+          subject_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_sent?: boolean
+          event_type: string
+          id?: string
+          period?: string
+          subject_id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_sent?: boolean
+          event_type?: string
+          id?: string
+          period?: string
+          subject_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
@@ -249,6 +279,8 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           daily_reminder_enabled: boolean
+          email_budget_alerts: boolean
+          email_jar_alerts: boolean
           full_name: string
           id: string
           monthly_expense_budget: number
@@ -264,6 +296,8 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           daily_reminder_enabled?: boolean
+          email_budget_alerts?: boolean
+          email_jar_alerts?: boolean
           full_name?: string
           id: string
           monthly_expense_budget?: number
@@ -279,6 +313,8 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           daily_reminder_enabled?: boolean
+          email_budget_alerts?: boolean
+          email_jar_alerts?: boolean
           full_name?: string
           id?: string
           monthly_expense_budget?: number
