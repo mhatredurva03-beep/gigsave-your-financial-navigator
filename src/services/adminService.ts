@@ -90,40 +90,46 @@ export interface UserDetail {
   };
 }
 
+/** Admin RPCs are defined outside the generated types, so call them loosely. */
+const callRpc = supabase.rpc as unknown as (
+  fn: string,
+  args?: Record<string, unknown>,
+) => Promise<{ data: unknown; error: { message: string } | null }>;
+
 export const adminService = {
   async checkIsAdmin(): Promise<boolean> {
-    const { data, error } = await supabase.rpc("is_admin");
+    const { data, error } = await callRpc("is_admin");
     if (error) return false;
     return data === true;
   },
 
   async getAdminRole(): Promise<string | null> {
-    const { data, error } = await supabase.rpc("get_admin_role");
+    const { data, error } = await callRpc("get_admin_role");
     if (error) return null;
-    return data;
+    return (data as string | null) ?? null;
   },
 
   async getPlatformStats(): Promise<PlatformStats> {
-    const { data, error } = await supabase.rpc("admin_get_platform_stats");
+    const { data, error } = await callRpc("admin_get_platform_stats");
     if (error) throw new Error(`Failed to get platform stats: ${error.message}`);
-    return data as unknown as PlatformStats;
+    return data as PlatformStats;
   },
 
   async listUsers(limit = 50, offset = 0, search?: string): Promise<UserListResult> {
-    const { data, error } = await supabase.rpc("admin_list_users", {
+    const { data, error } = await callRpc("admin_list_users", {
       p_limit: limit,
       p_offset: offset,
       p_search: search || null,
     });
     if (error) throw new Error(`Failed to list users: ${error.message}`);
-    return data as unknown as UserListResult;
+    return data as UserListResult;
   },
 
   async getUserDetail(userId: string): Promise<UserDetail> {
-    const { data, error } = await supabase.rpc("admin_get_user_detail", {
+    const { data, error } = await callRpc("admin_get_user_detail", {
       p_user_id: userId,
     });
     if (error) throw new Error(`Failed to get user detail: ${error.message}`);
-    return data as unknown as UserDetail;
+    return data as UserDetail;
   },
 };
