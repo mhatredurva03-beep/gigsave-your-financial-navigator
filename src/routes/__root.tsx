@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "GigSave helps gig workers track daily earnings, control expenses and save automatically into goal jars.",
       },
       { name: "author", content: "GigSave" },
-      { name: "theme-color", content: "#7c3aed" },
+      { name: "theme-color", content: "#163F5C" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
