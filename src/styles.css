@@ -55,6 +55,8 @@
   --color-sky: var(--brand-sky);
   --color-amber: var(--brand-amber);
   --color-teal: var(--brand-teal);
+  --color-navy: var(--brand-navy);
+  --color-green: var(--brand-green);
 
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
