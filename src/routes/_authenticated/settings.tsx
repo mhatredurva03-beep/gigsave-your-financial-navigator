@@ -54,6 +54,8 @@ const schema = z.object({
   monthly_expense_budget: z.coerce.number().min(0, "Budget cannot be negative").max(100_000_000),
   notifications_enabled: z.boolean(),
   daily_reminder_enabled: z.boolean(),
+  email_budget_alerts: z.boolean(),
+  email_jar_alerts: z.boolean(),
 });
 
 function SettingsPage() {
@@ -71,6 +73,8 @@ function SettingsPage() {
     monthly_expense_budget: "0",
     notifications_enabled: true,
     daily_reminder_enabled: true,
+    email_budget_alerts: true,
+    email_jar_alerts: true,
   });
 
   useEffect(() => {
@@ -84,6 +88,8 @@ function SettingsPage() {
       monthly_expense_budget: String(toNumber(profile.monthly_expense_budget)),
       notifications_enabled: profile.notifications_enabled ?? true,
       daily_reminder_enabled: profile.daily_reminder_enabled ?? true,
+      email_budget_alerts: profile.email_budget_alerts ?? true,
+      email_jar_alerts: profile.email_jar_alerts ?? true,
     });
   }, [profile]);
 
@@ -101,6 +107,8 @@ function SettingsPage() {
       monthly_expense_budget: parsed.data.monthly_expense_budget,
       notifications_enabled: parsed.data.notifications_enabled,
       daily_reminder_enabled: parsed.data.daily_reminder_enabled,
+      email_budget_alerts: parsed.data.email_budget_alerts,
+      email_jar_alerts: parsed.data.email_jar_alerts,
     });
   }
 
