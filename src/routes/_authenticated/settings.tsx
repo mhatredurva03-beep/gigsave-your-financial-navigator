@@ -265,6 +265,38 @@ function SettingsPage() {
                   aria-label="Toggle daily reminder"
                 />
               </div>
+              <Separator />
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium">Budget alert emails</p>
+                  <p className="text-xs text-muted-foreground">
+                    Email me when my monthly budget hits 80% or is exceeded.
+                  </p>
+                </div>
+                <Switch
+                  checked={form.email_budget_alerts}
+                  onCheckedChange={(checked) =>
+                    setForm((s) => ({ ...s, email_budget_alerts: checked }))
+                  }
+                  aria-label="Toggle budget alert emails"
+                />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium">Savings jar emails</p>
+                  <p className="text-xs text-muted-foreground">
+                    Email me when a jar or goal is fully funded.
+                  </p>
+                </div>
+                <Switch
+                  checked={form.email_jar_alerts}
+                  onCheckedChange={(checked) =>
+                    setForm((s) => ({ ...s, email_jar_alerts: checked }))
+                  }
+                  aria-label="Toggle savings jar emails"
+                />
+              </div>
             </GlassCard>
 
             <div className="flex flex-wrap gap-3">
