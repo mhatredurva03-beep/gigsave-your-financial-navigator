@@ -141,7 +141,7 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
 
       <div className="mx-auto flex max-w-6xl gap-6 px-4 pb-28 pt-5 lg:pb-10">
         <aside className="hidden w-56 shrink-0 lg:block">
-          <div className="sticky top-24">
+          <div className="sticky top-24 rounded-2xl bg-navy p-3 shadow-card">
             <SideNav />
           </div>
         </aside>
