@@ -21,6 +21,20 @@ import { APP_NAME } from "@/constants/app";
 import { firstName, initials, relativeDay } from "@/utils/format";
 import { cn } from "@/lib/utils";
 
+/** Alert tone + deep-link target per notification type. */
+const NOTIFICATION_TONE: Record<string, string> = {
+  warning: "border-l-amber",
+  danger: "border-l-destructive",
+  success: "border-l-teal",
+  info: "border-l-primary",
+};
+
+const NOTIFICATION_TARGET: Record<string, "/expenses" | "/jars" | "/goals" | undefined> = {
+  warning: "/expenses",
+  danger: "/expenses",
+  success: "/goals",
+};
+
 export function AppShell({ children, streak = 0 }: { children: React.ReactNode; streak?: number }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -43,7 +57,7 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
           <Link to="/dashboard" className="flex min-w-0 items-center gap-2.5">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl gradient-primary text-white shadow-glow">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-navy text-white shadow-soft">
               <PiggyBank className="h-5 w-5" aria-hidden="true" />
             </span>
             <span className="min-w-0">
@@ -92,9 +106,17 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
                       {notifications.map((item) => (
                         <button
                           key={item.id}
-                          onClick={() => markRead.mutate(item.id)}
+                          onClick={() => {
+                            markRead.mutate(item.id);
+                            const target = NOTIFICATION_TARGET[item.type];
+                            if (target) {
+                              setNotifOpen(false);
+                              navigate({ to: target });
+                            }
+                          }}
                           className={cn(
-                            "w-full rounded-xl border border-border/60 p-3 text-left transition-colors hover:bg-accent",
+                            "w-full rounded-xl border border-border/60 border-l-4 p-3 text-left transition-colors hover:bg-accent",
+                            NOTIFICATION_TONE[item.type] ?? "border-l-primary",
                             !item.is_read && "bg-accent/60",
                           )}
                         >
@@ -115,7 +137,7 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" aria-label="Account menu">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback className="gradient-primary text-xs font-semibold text-white">
+                    <AvatarFallback className="bg-navy text-xs font-semibold text-white">
                       {initials(profile?.full_name)}
                     </AvatarFallback>
                   </Avatar>
@@ -141,7 +163,7 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
 
       <div className="mx-auto flex max-w-6xl gap-6 px-4 pb-28 pt-5 lg:pb-10">
         <aside className="hidden w-56 shrink-0 lg:block">
-          <div className="sticky top-24">
+          <div className="sticky top-24 rounded-2xl bg-navy p-3 shadow-card">
             <SideNav />
           </div>
         </aside>

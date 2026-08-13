@@ -7,6 +7,8 @@ import { ProgressRing } from "@/components/ui/progress-ring";
 import { EmptyState } from "@/components/ui/empty-state";
 import { DynamicIcon } from "@/components/ui/dynamic-icon";
 import { Button } from "@/components/ui/button";
+import { SUGGESTED_QUESTIONS } from "@/components/coach/CoachChat";
+import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFinancialOverview } from "@/hooks/useFinancialOverview";
 import { formatCurrency, relativeDay, toNumber } from "@/utils/format";
@@ -115,25 +117,59 @@ function DashboardPage() {
             />
           ) : (
             <div className="grid gap-3 sm:grid-cols-2">
-              {overview.jars.map((jar) => (
-                <GlassCard key={jar.id} className="flex items-center gap-4">
-                  <span
-                    className="grid h-11 w-11 shrink-0 place-items-center rounded-xl"
-                    style={toneStyle(jar.color)}
-                  >
-                    <DynamicIcon name={jar.icon} className="h-5 w-5" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold">{jar.jar_name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {toNumber(jar.percentage)}% of every income
-                    </p>
-                  </div>
-                  <p className="shrink-0 text-sm font-bold">
-                    {formatCurrency(toNumber(jar.balance), currency)}
-                  </p>
-                </GlassCard>
-              ))}
+              {overview.jars.map((jar) => {
+                const linkedGoal = overview.goals.find((goal) => goal.jar_id === jar.id);
+                const target = linkedGoal ? toNumber(linkedGoal.target_amount) : 0;
+                const balance = toNumber(jar.balance);
+                const percent =
+                  target > 0 ? Math.min(100, Math.round((balance / target) * 100)) : null;
+                return (
+                  <GlassCard key={jar.id} className="space-y-3">
+                    <div className="flex items-center gap-4">
+                      <span
+                        className="grid h-11 w-11 shrink-0 place-items-center rounded-xl"
+                        style={toneStyle(jar.color)}
+                      >
+                        <DynamicIcon name={jar.icon} className="h-5 w-5" />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold">{jar.jar_name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {toNumber(jar.percentage)}% of every income
+                        </p>
+                      </div>
+                      <p className="shrink-0 text-sm font-bold">
+                        {formatCurrency(balance, currency)}
+                      </p>
+                    </div>
+                    {percent !== null ? (
+                      <div className="space-y-1.5">
+                        <div
+                          className="h-1.5 w-full overflow-hidden rounded-full bg-muted"
+                          role="progressbar"
+                          aria-valuenow={percent}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-label={`${jar.jar_name} progress`}
+                        >
+                          <div
+                            className={cn(
+                              "h-full rounded-full transition-[width] duration-500",
+                              percent >= 100 ? "bg-success" : "bg-primary",
+                            )}
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
+                        <p className="text-[11px] text-muted-foreground">
+                          {percent >= 100
+                            ? "Jar full — goal reached 🎉"
+                            : `${percent}% of ${formatCurrency(target, currency)} · ${formatCurrency(target - balance, currency)} to go`}
+                        </p>
+                      </div>
+                    ) : null}
+                  </GlassCard>
+                );
+              })}
             </div>
           )}
         </section>
@@ -221,19 +257,32 @@ function DashboardPage() {
           )}
         </section>
 
-        <GlassCard className="flex items-center gap-4">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl gradient-warm text-white">
-            <Sparkles className="h-5 w-5" />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold">Your money coach</p>
-            <p className="truncate text-xs text-muted-foreground">
-              {overview.insights[0]?.message ?? "Log some income to unlock personalised tips."}
-            </p>
+        <GlassCard className="space-y-3">
+          <div className="flex items-center gap-4">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary/12 text-primary">
+              <Sparkles className="h-5 w-5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold">GigSave AI Coach</p>
+              <p className="text-xs text-muted-foreground">
+                Ask me anything about your income, spending, budgets or savings.
+              </p>
+            </div>
+            <Button asChild size="sm" className="shrink-0">
+              <Link to="/coach">Open</Link>
+            </Button>
           </div>
-          <Button asChild variant="ghost" size="sm" className="shrink-0">
-            <Link to="/coach">Open</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTED_QUESTIONS.slice(0, 3).map((question) => (
+              <Link
+                key={question}
+                to="/coach"
+                className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium transition-colors hover:border-primary hover:text-primary"
+              >
+                {question}
+              </Link>
+            ))}
+          </div>
         </GlassCard>
       </div>
     </AppShell>

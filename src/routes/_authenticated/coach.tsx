@@ -6,6 +6,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { GlassCard, SectionHeading } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { ProgressRing } from "@/components/ui/progress-ring";
+import { CoachChat } from "@/components/coach/CoachChat";
 import { useFinancialOverview } from "@/hooks/useFinancialOverview";
 import { formatCurrency, toNumber } from "@/utils/format";
 import { estimateGoalCompletion, goalProgress } from "@/utils/finance";
@@ -14,22 +15,25 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/coach")({
   head: () => ({
     meta: [
-      { title: "Money Coach — GigSave" },
+      { title: "AI Coach — GigSave" },
       {
         name: "description",
-        content: "Personalised savings tips based on your real earnings, spending and goals.",
+        content:
+          "Your personal guide for smarter spending and saving, based on your real GigSave data.",
       },
-      { property: "og:title", content: "Money Coach — GigSave" },
-      { property: "og:description", content: "Your daily money coach for gig work income." },
+      { property: "og:title", content: "AI Coach — GigSave" },
+      { property: "og:description", content: "Your personal guide for smarter spending and saving." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: CoachPage,
 });
 
 const TONE_CLASS: Record<string, string> = {
-  positive: "border-l-4 border-l-[var(--brand-teal)]",
-  neutral: "border-l-4 border-l-[var(--brand-sky)]",
-  warning: "border-l-4 border-l-[var(--brand-amber)]",
+  positive: "border-l-4 border-l-teal",
+  neutral: "border-l-4 border-l-primary",
+  warning: "border-l-4 border-l-amber",
 };
 
 function CoachPage() {
@@ -102,9 +106,13 @@ function CoachPage() {
     <AppShell>
       <div className="space-y-6">
         <SectionHeading
-          title="Money Coach"
-          description="Personalised guidance from your own numbers."
+          title="GigSave AI Coach"
+          description="Your personal guide for smarter spending and saving."
         />
+
+        <GlassCard className="flex min-h-100 flex-col">
+          <CoachChat className="flex-1" />
+        </GlassCard>
 
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Reading your finances…</p>
