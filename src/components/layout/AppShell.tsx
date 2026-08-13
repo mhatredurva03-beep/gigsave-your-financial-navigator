@@ -43,7 +43,7 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
           <Link to="/dashboard" className="flex min-w-0 items-center gap-2.5">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl gradient-primary text-white shadow-glow">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-navy text-white shadow-soft">
               <PiggyBank className="h-5 w-5" aria-hidden="true" />
             </span>
             <span className="min-w-0">
