@@ -81,79 +81,79 @@
   --radius: 1.25rem;
 
   /* Canvas & surfaces */
-  --background: oklch(0.978 0.005 280);
-  --foreground: oklch(0.24 0.015 275);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.24 0.015 275);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.24 0.015 275);
+  --background: #f7f9fc;
+  --foreground: #0f2233;
+  --card: #ffffff;
+  --card-foreground: #0f2233;
+  --popover: #ffffff;
+  --popover-foreground: #0f2233;
 
-  /* Brand */
-  --brand-violet: oklch(0.585 0.208 285);
-  --brand-purple: oklch(0.601 0.221 302);
-  --brand-pink: oklch(0.685 0.199 358);
-  --brand-sky: oklch(0.745 0.128 233);
-  --brand-amber: oklch(0.79 0.144 78);
-  --brand-teal: oklch(0.73 0.122 183);
+  /* Brand — navy / teal / green fintech palette.
+     Legacy tone names are kept so database-stored jar colours keep working. */
+  --brand-navy: #173b57;
+  --brand-teal-primary: #18a999;
+  --brand-green: #22c55e;
 
-  --primary: oklch(0.585 0.208 285);
-  --primary-foreground: oklch(0.995 0 0);
-  --primary-soft: oklch(0.955 0.024 288);
+  --brand-violet: #173b57; /* navy */
+  --brand-purple: #18a999; /* teal */
+  --brand-pink: #e85d5d; /* danger / coral */
+  --brand-sky: #3d7ea6; /* muted steel blue */
+  --brand-amber: #f4b942; /* warning */
+  --brand-teal: #22c55e; /* success green */
 
-  --secondary: oklch(0.965 0.011 285);
-  --secondary-foreground: oklch(0.32 0.05 285);
+  --primary: #18a999;
+  --primary-foreground: #ffffff;
+  --primary-soft: #e6f6f3;
 
-  --muted: oklch(0.965 0.008 285);
-  --muted-foreground: oklch(0.56 0.021 278);
+  --secondary: #edf2f8;
+  --secondary-foreground: #173b57;
 
-  --accent: oklch(0.955 0.024 288);
-  --accent-foreground: oklch(0.42 0.15 288);
+  --muted: #eef2f7;
+  --muted-foreground: #5c7288;
 
-  --destructive: oklch(0.638 0.216 12);
-  --destructive-foreground: oklch(0.995 0 0);
-  --success: oklch(0.717 0.166 155);
-  --success-foreground: oklch(0.995 0 0);
-  --warning: oklch(0.79 0.144 78);
-  --warning-foreground: oklch(0.24 0.015 275);
+  --accent: #e6f6f3;
+  --accent-foreground: #0f5d55;
 
-  --border: oklch(0.932 0.008 280);
-  --input: oklch(0.932 0.008 280);
-  --ring: oklch(0.585 0.208 285);
+  --destructive: #e85d5d;
+  --destructive-foreground: #ffffff;
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+  --warning: #f4b942;
+  --warning-foreground: #0f2233;
 
-  --chart-1: oklch(0.585 0.208 285);
-  --chart-2: oklch(0.685 0.199 358);
-  --chart-3: oklch(0.745 0.128 233);
-  --chart-4: oklch(0.79 0.144 78);
-  --chart-5: oklch(0.717 0.166 155);
-  --chart-6: oklch(0.73 0.122 183);
+  --border: #e2e9f1;
+  --input: #e2e9f1;
+  --ring: #18a999;
 
-  /* Gradients */
-  --gradient-primary: linear-gradient(
-    135deg,
-    oklch(0.585 0.208 285),
-    oklch(0.601 0.221 302) 52%,
-    oklch(0.685 0.199 358)
-  );
-  --gradient-secondary: linear-gradient(135deg, oklch(0.745 0.128 233), oklch(0.585 0.208 292));
-  --gradient-success: linear-gradient(135deg, oklch(0.717 0.166 155), oklch(0.73 0.122 183));
-  --gradient-warm: linear-gradient(135deg, oklch(0.79 0.144 78), oklch(0.685 0.199 358));
+  --chart-1: #18a999;
+  --chart-2: #173b57;
+  --chart-3: #3d7ea6;
+  --chart-4: #f4b942;
+  --chart-5: #22c55e;
+  --chart-6: #e85d5d;
+
+  /* Gradients — restrained, navy to teal */
+  --gradient-primary: linear-gradient(135deg, #173b57, #15566b 55%, #18a999);
+  --gradient-secondary: linear-gradient(135deg, #173b57, #3d7ea6);
+  --gradient-success: linear-gradient(135deg, #18a999, #22c55e);
+  --gradient-warm: linear-gradient(135deg, #f4b942, #e85d5d);
   --gradient-canvas:
     radial-gradient(
       1200px 600px at 12% -10%,
-      color-mix(in oklab, var(--brand-violet) 12%, transparent),
+      color-mix(in oklab, var(--brand-navy) 6%, transparent),
       transparent 60%
     ),
     radial-gradient(
       900px 520px at 105% 0%,
-      color-mix(in oklab, var(--brand-pink) 10%, transparent),
+      color-mix(in oklab, var(--brand-teal-primary) 6%, transparent),
       transparent 62%
     );
 
   /* Elevation */
-  --shadow-soft-value: 0 2px 10px -4px oklch(0.35 0.05 285 / 0.1);
-  --shadow-card-value: 0 18px 46px -26px oklch(0.35 0.08 285 / 0.34);
-  --shadow-glow-value: 0 16px 42px -14px color-mix(in oklab, var(--brand-purple) 46%, transparent);
-  --shadow-float-value: 0 14px 34px -10px color-mix(in oklab, var(--brand-purple) 52%, transparent);
+  --shadow-soft-value: 0 2px 10px -4px color-mix(in oklab, var(--brand-navy) 14%, transparent);
+  --shadow-card-value: 0 16px 40px -28px color-mix(in oklab, var(--brand-navy) 40%, transparent);
+  --shadow-glow-value: 0 14px 34px -16px color-mix(in oklab, var(--brand-navy) 42%, transparent);
+  --shadow-float-value: 0 12px 28px -12px color-mix(in oklab, var(--brand-navy) 40%, transparent);
 }
 
 .dark {
