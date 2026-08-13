@@ -38,7 +38,20 @@ const FINANCIAL_KEYS = [
 
 function useInvalidateFinancials() {
   const queryClient = useQueryClient();
-  return () => FINANCIAL_KEYS.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
+  const checkAlerts = useServerFn(runFinancialAlerts);
+  return () => {
+    FINANCIAL_KEYS.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
+    // Budget / jar alerts are evaluated server-side; duplicates are blocked there.
+    void checkAlerts({ data: {} })
+      .then((result) => {
+        if (result.created > 0) {
+          queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
+        }
+      })
+      .catch(() => {
+        /* alerts are best-effort and must never block a write */
+      });
+  };
 }
 
 function onError(error: unknown) {
