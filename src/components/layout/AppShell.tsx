@@ -21,6 +21,20 @@ import { APP_NAME } from "@/constants/app";
 import { firstName, initials, relativeDay } from "@/utils/format";
 import { cn } from "@/lib/utils";
 
+/** Alert tone + deep-link target per notification type. */
+const NOTIFICATION_TONE: Record<string, string> = {
+  warning: "border-l-amber",
+  danger: "border-l-destructive",
+  success: "border-l-teal",
+  info: "border-l-primary",
+};
+
+const NOTIFICATION_TARGET: Record<string, "/expenses" | "/jars" | "/goals" | undefined> = {
+  warning: "/expenses",
+  danger: "/expenses",
+  success: "/goals",
+};
+
 export function AppShell({ children, streak = 0 }: { children: React.ReactNode; streak?: number }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
