@@ -92,9 +92,17 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
                       {notifications.map((item) => (
                         <button
                           key={item.id}
-                          onClick={() => markRead.mutate(item.id)}
+                          onClick={() => {
+                            markRead.mutate(item.id);
+                            const target = NOTIFICATION_TARGET[item.type];
+                            if (target) {
+                              setNotifOpen(false);
+                              navigate({ to: target });
+                            }
+                          }}
                           className={cn(
-                            "w-full rounded-xl border border-border/60 p-3 text-left transition-colors hover:bg-accent",
+                            "w-full rounded-xl border border-border/60 border-l-4 p-3 text-left transition-colors hover:bg-accent",
+                            NOTIFICATION_TONE[item.type] ?? "border-l-primary",
                             !item.is_read && "bg-accent/60",
                           )}
                         >
