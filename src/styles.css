@@ -157,33 +157,34 @@
 }
 
 .dark {
-  --background: oklch(0.19 0.019 280);
-  --foreground: oklch(0.965 0.006 280);
-  --card: oklch(0.238 0.023 282);
-  --card-foreground: oklch(0.965 0.006 280);
-  --popover: oklch(0.238 0.023 282);
-  --popover-foreground: oklch(0.965 0.006 280);
+  --background: #0b1a27;
+  --foreground: #eaf1f7;
+  --card: #12293b;
+  --card-foreground: #eaf1f7;
+  --popover: #12293b;
+  --popover-foreground: #eaf1f7;
 
-  --primary: oklch(0.685 0.185 288);
-  --primary-foreground: oklch(0.16 0.02 280);
-  --primary-soft: oklch(0.3 0.05 288);
+  --primary: #2cc2b1;
+  --primary-foreground: #06202b;
+  --primary-soft: #163d47;
 
-  --secondary: oklch(0.288 0.026 282);
-  --secondary-foreground: oklch(0.965 0.006 280);
-  --muted: oklch(0.288 0.026 282);
-  --muted-foreground: oklch(0.72 0.02 280);
-  --accent: oklch(0.31 0.045 288);
-  --accent-foreground: oklch(0.94 0.02 288);
+  --secondary: #1a3purple;
+  --secondary: #1a3547;
+  --secondary-foreground: #eaf1f7;
+  --muted: #1a3547;
+  --muted-foreground: #9fb4c6;
+  --accent: #14414a;
+  --accent-foreground: #b7ece5;
 
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.685 0.185 288);
+  --ring: #2cc2b1;
 
   --shadow-card-value: 0 18px 46px -26px oklch(0 0 0 / 0.7);
   --shadow-soft-value: 0 2px 10px -4px oklch(0 0 0 / 0.5);
   --gradient-canvas:
-    radial-gradient(1100px 560px at 10% -10%, oklch(0.44 0.14 288 / 0.32), transparent 60%),
-    radial-gradient(900px 520px at 105% 0%, oklch(0.46 0.14 340 / 0.24), transparent 62%);
+    radial-gradient(1100px 560px at 10% -10%, color-mix(in oklab, #18a999 16%, transparent), transparent 60%),
+    radial-gradient(900px 520px at 105% 0%, color-mix(in oklab, #173b57 40%, transparent), transparent 62%);
 }
 
 @layer base {
