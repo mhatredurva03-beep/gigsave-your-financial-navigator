@@ -115,7 +115,7 @@ export function AppShell({ children, streak = 0 }: { children: React.ReactNode; 
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" aria-label="Account menu">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback className="gradient-primary text-xs font-semibold text-white">
+                    <AvatarFallback className="bg-navy text-xs font-semibold text-white">
                       {initials(profile?.full_name)}
                     </AvatarFallback>
                   </Avatar>
