@@ -221,19 +221,32 @@ function DashboardPage() {
           )}
         </section>
 
-        <GlassCard className="flex items-center gap-4">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl gradient-warm text-white">
-            <Sparkles className="h-5 w-5" />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold">Your money coach</p>
-            <p className="truncate text-xs text-muted-foreground">
-              {overview.insights[0]?.message ?? "Log some income to unlock personalised tips."}
-            </p>
+        <GlassCard className="space-y-3">
+          <div className="flex items-center gap-4">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary/12 text-primary">
+              <Sparkles className="h-5 w-5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold">GigSave AI Coach</p>
+              <p className="text-xs text-muted-foreground">
+                Ask me anything about your income, spending, budgets or savings.
+              </p>
+            </div>
+            <Button asChild size="sm" className="shrink-0">
+              <Link to="/coach">Open</Link>
+            </Button>
           </div>
-          <Button asChild variant="ghost" size="sm" className="shrink-0">
-            <Link to="/coach">Open</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTED_QUESTIONS.slice(0, 3).map((question) => (
+              <Link
+                key={question}
+                to="/coach"
+                className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium transition-colors hover:border-primary hover:text-primary"
+              >
+                {question}
+              </Link>
+            ))}
+          </div>
         </GlassCard>
       </div>
     </AppShell>
