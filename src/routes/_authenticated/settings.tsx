@@ -54,6 +54,8 @@ const schema = z.object({
   monthly_expense_budget: z.coerce.number().min(0, "Budget cannot be negative").max(100_000_000),
   notifications_enabled: z.boolean(),
   daily_reminder_enabled: z.boolean(),
+  email_budget_alerts: z.boolean(),
+  email_jar_alerts: z.boolean(),
 });
 
 function SettingsPage() {
@@ -71,6 +73,8 @@ function SettingsPage() {
     monthly_expense_budget: "0",
     notifications_enabled: true,
     daily_reminder_enabled: true,
+    email_budget_alerts: true,
+    email_jar_alerts: true,
   });
 
   useEffect(() => {
@@ -84,6 +88,8 @@ function SettingsPage() {
       monthly_expense_budget: String(toNumber(profile.monthly_expense_budget)),
       notifications_enabled: profile.notifications_enabled ?? true,
       daily_reminder_enabled: profile.daily_reminder_enabled ?? true,
+      email_budget_alerts: profile.email_budget_alerts ?? true,
+      email_jar_alerts: profile.email_jar_alerts ?? true,
     });
   }, [profile]);
 
@@ -101,6 +107,8 @@ function SettingsPage() {
       monthly_expense_budget: parsed.data.monthly_expense_budget,
       notifications_enabled: parsed.data.notifications_enabled,
       daily_reminder_enabled: parsed.data.daily_reminder_enabled,
+      email_budget_alerts: parsed.data.email_budget_alerts,
+      email_jar_alerts: parsed.data.email_jar_alerts,
     });
   }
 
@@ -255,6 +263,38 @@ function SettingsPage() {
                     setForm((s) => ({ ...s, daily_reminder_enabled: checked }))
                   }
                   aria-label="Toggle daily reminder"
+                />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium">Budget alert emails</p>
+                  <p className="text-xs text-muted-foreground">
+                    Email me when my monthly budget hits 80% or is exceeded.
+                  </p>
+                </div>
+                <Switch
+                  checked={form.email_budget_alerts}
+                  onCheckedChange={(checked) =>
+                    setForm((s) => ({ ...s, email_budget_alerts: checked }))
+                  }
+                  aria-label="Toggle budget alert emails"
+                />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium">Savings jar emails</p>
+                  <p className="text-xs text-muted-foreground">
+                    Email me when a jar or goal is fully funded.
+                  </p>
+                </div>
+                <Switch
+                  checked={form.email_jar_alerts}
+                  onCheckedChange={(checked) =>
+                    setForm((s) => ({ ...s, email_jar_alerts: checked }))
+                  }
+                  aria-label="Toggle savings jar emails"
                 />
               </div>
             </GlassCard>
