@@ -34,8 +34,10 @@ export function SideNav() {
         <Link
           key={to}
           to={to}
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          activeProps={{ className: "bg-accent text-foreground" }}
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+          activeProps={{
+            className: "bg-primary/20 text-white ring-1 ring-primary/40",
+          }}
         >
           <Icon className="h-4.5 w-4.5 shrink-0" aria-hidden="true" />
           <span className="truncate">{label}</span>
