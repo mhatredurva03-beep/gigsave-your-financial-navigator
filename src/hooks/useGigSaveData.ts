@@ -42,9 +42,9 @@ function useInvalidateFinancials() {
   return () => {
     FINANCIAL_KEYS.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     // Budget / jar alerts are evaluated server-side; duplicates are blocked there.
-    void checkAlerts({ data: {} })
+    void checkAlerts()
       .then((result) => {
-        if (result.created > 0) {
+        if (result.created.length > 0) {
           queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
         }
       })
