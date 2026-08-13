@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { DynamicIcon } from "@/components/ui/dynamic-icon";
 import { Button } from "@/components/ui/button";
 import { SUGGESTED_QUESTIONS } from "@/components/coach/CoachChat";
+import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFinancialOverview } from "@/hooks/useFinancialOverview";
 import { formatCurrency, relativeDay, toNumber } from "@/utils/format";
